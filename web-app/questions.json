@@ -1,225 +1,225 @@
-[
-  {
-    "question": "What is your primary learning style?",
-    "answers": [
-      "Visual",
-      "Auditory",
-      "Hands on",
-      "Read/write"
-    ]
+{
+  "q1": {
+      "question": "What is your primary learning style?",
+      "answers": {
+          "Visual": "#33FF57",
+          "Auditory": "#3357FF",
+          "Hands on": "#57FF33",
+          "Read/write": "#FF3357"
+      }
   },
-  {
-    "question": "What’s my primary superpower?",
-    "answers": [
-      "I can detect people’s moods",
-      "I work well under pressure",
-      "I have high focus abilities",
-      "I am good at streamlining tasks for simplicity",
-      "I have a good attention to detail"
-    ]
+  "q2": {
+      "question": "What's my primary superpower?",
+      "answers": {
+          "I can detect people's moods": "#3357FF",
+          "I work well under pressure": "#57FF33",
+          "I have high focus abilities": "#FF3357",
+          "I am good at streamlining tasks for simplicity": "#F1C40F",
+          "I have a good attention to detail": "#8E44AD"
+      }
   },
-  {
-    "question": "What is your current occupation?",
-    "answers": [
-      "Education/student",
-      "Self-employed",
-      "Work at a company or in industry",
-      "Not employed",
-      "Other"
-    ]
+  "q3": {
+      "question": "What is your current occupation?",
+      "answers": {
+          "Education/student": "#57FF33",
+          "Self-employed": "#FF3357",
+          "Work at a company or in industry": "#F1C40F",
+          "Not employed": "#8E44AD",
+          "Other": "#3498DB"
+      }
   },
-  {
-    "question": "What is your level of exposure to adversity?",
-    "answers": [
-      "I have not experienced adversity",
-      "I have experienced minimal adversity",
-      "I have experienced moderate adversity",
-      "I have experienced extensive adversity"
-    ]
+  "q4": {
+      "question": "What is your level of exposure to adversity?",
+      "answers": {
+          "I have not experienced adversity": "#FF3357",
+          "I have experienced minimal adversity": "#F1C40F",
+          "I have experienced moderate adversity": "#8E44AD",
+          "I have experienced extensive adversity": "#3498DB"
+      }
   },
-  {
-    "question": "What sounds like your ideal way to spend your free time?",
-    "answers": [
-      "Traveling",
-      "Spending time in the great outdoors",
-      "Going out with friends",
-      "Chilling at home",
-      "I don’t have free time"
-    ]
+  "q5": {
+      "question": "What sounds like your ideal way to spend your free time?",
+      "answers": {
+          "Traveling": "#F1C40F",
+          "Spending time in the great outdoors": "#8E44AD",
+          "Going out with friends": "#3498DB",
+          "Chilling at home": "#E74C3C",
+          "I don't have free time": "#2ECC71"
+      }
   },
-  {
-    "question": "How diverse is your food palette?",
-    "answers": [
-      "Not at all",
-      "A little",
-      "A lot",
-      "Extremely"
-    ]
+  "q6": {
+      "question": "How diverse is your food palette?",
+      "answers": {
+          "Not at all": "#8E44AD",
+          "A little": "#3498DB",
+          "A lot": "#E74C3C",
+          "Extremely": "#2ECC71"
+      }
   },
-  {
-    "question": "Where do you grow up?",
-    "answers": [
-      "Grew up in the Bay Area",
-      "Enjoyed the SoCal lifestyle",
-      "Originated from another US State",
-      "Started life in a different country",
-      "Other"
-    ]
+  "q7": {
+      "question": "Where do you grow up?",
+      "answers": {
+          "Grew up in the Bay Area": "#3498DB",
+          "Enjoyed the SoCal lifestyle": "#E74C3C",
+          "Originated from another US State": "#2ECC71",
+          "Started life in a different country": "#1ABC9C",
+          "Other": "#9B59B6"
+      }
   },
-  {
-    "question": "Are you more of an introvert or an extrovert?",
-    "answers": [
-      "Introvert",
-      "Semi-introverted",
-      "Semi-extroverted",
-      "Extrovert"
-    ]
+  "q8": {
+      "question": "Are you more of an introvert or an extrovert?",
+      "answers": {
+          "Introvert": "#E74C3C",
+          "Semi-introverted": "#2ECC71",
+          "Semi-extroverted": "#1ABC9C",
+          "Extrovert": "#9B59B6"
+      }
   },
-  {
-    "question": "What’s your favorite genre for movies/books",
-    "answers": [
-      "Fantasy/sci-Fi",
-      "Thriller/mystery",
-      "Nonfiction",
-      "Action/adventure",
-      "Comedy"
-    ]
+  "q9": {
+      "question": "What's your favorite genre for movies/books",
+      "answers": {
+          "Fantasy/sci-Fi": "#2ECC71",
+          "Thriller/mystery": "#1ABC9C",
+          "Nonfiction": "#9B59B6",
+          "Action/adventure": "#34495E",
+          "Comedy": "#16A085"
+      }
   },
-  {
-    "question": "How would you describe your fashion style?",
-    "answers": [
-      "Casual and comfortable",
-      "Trendy and fashionable",
-      "Vintage and retro",
-      "Professional and polished",
-      "Alternative Styles"
-    ]
+  "q10": {
+      "question": "How would you describe your fashion style?",
+      "answers": {
+          "Casual and comfortable": "#1ABC9C",
+          "Trendy and fashionable": "#9B59B6",
+          "Vintage and retro": "#34495E",
+          "Professional and polished": "#16A085",
+          "Alternative Styles": "#27AE60"
+      }
   },
-  {
-    "question": "Are you more of an analytical or emotional thinker?",
-    "answers": [
-      "Analytical",
-      "Semi-analytical",
-      "Semi-emotional",
-      "Emotional"
-    ]
+  "q11": {
+      "question": "Are you more of an analytical or emotional thinker?",
+      "answers": {
+          "Analytical": "#9B59B6",
+          "Semi-analytical": "#34495E",
+          "Semi-emotional": "#16A085",
+          "Emotional": "#27AE60"
+      }
   },
-  {
-    "question": "If you hear something derogatory towards someone in your group. How do you react?",
-    "answers": [
-      "Confront the person who said it",
-      "Report it to someone",
-      "Console the person in your group",
-      "Let it slide"
-    ]
+  "q12": {
+      "question": "If you hear something derogatory towards someone in your group. How do you react?",
+      "answers": {
+          "Confront the person who said it": "#34495E",
+          "Report it to someone": "#16A085",
+          "Console the person in your group": "#27AE60",
+          "Let it slide": "#2980B9"
+      }
   },
-  {
-    "question": "How receptive are you to adapting to unexpected changes in life?",
-    "answers": [
-      "Not open",
-      "Somewhat open",
-      "Frequently open",
-      "Always open"
-    ]
+  "q13": {
+      "question": "How receptive are you to adapting to unexpected changes in life?",
+      "answers": {
+          "Not open": "#16A085",
+          "Somewhat open": "#27AE60",
+          "Frequently open": "#2980B9",
+          "Always open": "#8E44AD"
+      }
   },
-  {
-    "question": "How much of your day do you plan out beforehand?",
-    "answers": [
-      "I go with the flow",
-      "I keep loose track of my daily plans",
-      "I plan my schedule to the hour",
-      "I will never stray from my strict plans"
-    ]
+  "q14": {
+      "question": "How much of your day do you plan out beforehand?",
+      "answers": {
+          "I go with the flow": "#27AE60",
+          "I keep loose track of my daily plans": "#2980B9",
+          "I plan my schedule to the hour": "#8E44AD",
+          "I will never stray from my strict plans": "#F39C12"
+      }
   },
-  {
-    "question": "How willing are you to take risks in forming new relationships?",
-    "answers": [
-      "Never",
-      "Occasionally",
-      "Frequently",
-      "Always"
-    ]
+  "q15": {
+      "question": "How willing are you to take risks in forming new relationships?",
+      "answers": {
+          "Never": "#2980B9",
+          "Occasionally": "#8E44AD",
+          "Frequently": "#F39C12",
+          "Always": "#D35400"
+      }
   },
-  {
-    "question": "How do you typically cope with challenging or adverse situations?",
-    "answers": [
-      "Comforting yourself with experiences you enjoy",
-      "Distracting yourself with outside media",
-      "Practicing introspection and expressing your feelings",
-      "Performing mindfulness techniques for grounding yourself in the present",
-      "Reach out to your support system for help"
-    ]
+  "q16": {
+      "question": "How do you typically cope with challenging or adverse situations?",
+      "answers": {
+          "Comforting yourself with experiences you enjoy": "#8E44AD",
+          "Distracting yourself with outside media": "#F39C12",
+          "Practicing introspection and expressing your feelings": "#D35400",
+          "Performing mindfulness techniques for grounding yourself in the present": "#C0392B",
+          "Reach out to your support system for help": "#BDC3C7"
+      }
   },
-  {
-    "question": "How do you react to comparing yourself to others?",
-    "answers": [
-      "Use it as a source of inspiration",
-      "Feel a sense of jealousy",
-      "Gain feelings of gratitude for your situation",
-      "Develop feelings of scorn and negativity towards that person"
-    ]
+  "q17": {
+      "question": "How do you react to comparing yourself to others?",
+      "answers": {
+          "Use it as a source of inspiration": "#F39C12",
+          "Feel a sense of jealousy": "#D35400",
+          "Gain feelings of gratitude for your situation": "#C0392B",
+          "Develop feelings of scorn and negativity towards that person": "#BDC3C7"
+      }
   },
-  {
-    "question": "How often do you like or comment on others’ social media?",
-    "answers": [
-      "Never",
-      "Once in a while",
-      "Frequently",
-      "All the time"
-    ]
+  "q18": {
+      "question": "How often do you like or comment on others' social media?",
+      "answers": {
+          "Never": "#D35400",
+          "Once in a while": "#C0392B",
+          "Frequently": "#BDC3C7",
+          "All the time": "#7F8C8D"
+      }
   },
-  {
-    "question": "How likely are you to collaborate with someone different from you?",
-    "answers": [
-      "Never",
-      "Not a lot",
-      "Frequently",
-      "As often as I’m able to"
-    ]
+  "q19": {
+      "question": "How likely are you to collaborate with someone different from you?",
+      "answers": {
+          "Never": "#C0392B",
+          "Not a lot": "#BDC3C7",
+          "Frequently": "#7F8C8D",
+          "As often as I'm able to": "#99A3A4"
+      }
   },
-  {
-    "question": "How often do you give in to peer pressure?",
-    "answers": [
-      "Never",
-      "Sometimes",
-      "Frequently",
-      "All the time"
-    ]
+  "q20": {
+      "question": "How often do you give in to peer pressure?",
+      "answers": {
+          "Never": "#BDC3C7",
+          "Sometimes": "#7F8C8D",
+          "Frequently": "#99A3A4",
+          "All the time": "#7FB3D5"
+      }
   },
-  {
-    "question": "Are you more likely to be motivated by internal factors (satisfaction) or external factors (prizes)?",
-    "answers": [
-      "Internally",
-      "Mostly internally",
-      "Mostly externally",
-      "Externally"
-    ]
+  "q21": {
+      "question": "Are you more likely to be motivated by internal factors (satisfaction) or external factors (prizes)?",
+      "answers": {
+          "Internally": "#7F8C8D",
+          "Mostly internally": "#99A3A4",
+          "Mostly externally": "#7FB3D5",
+          "Externally": "#D98880"
+      }
   },
-  {
-    "question": "What best describes your sense of humor?",
-    "answers": [
-      "Slapstick/physical",
-      "Dad jokes/puns",
-      "Self-deprecating",
-      "Dark humor"
-    ]
+  "q22": {
+      "question": "What best describes your sense of humor?",
+      "answers": {
+          "Slapstick/physical": "#99A3A4",
+          "Dad jokes/puns": "#7FB3D5",
+          "Self-deprecating": "#D98880",
+          "Dark humor": "#C39BD3"
+      }
   },
-  {
-    "question": "How do you react when getting praise/compliments in public?",
-    "answers": [
-      "I take it as validation of my work, finding motivation in recognition.",
-      "I don’t like it, preferring to work behind the scenes and stay humble.",
-      "I get uncomfortable when it happens, seeing it as unnecessary attention",
-      "I have mixed feelings; I appreciate the praise while worrying about increased expectations and pressure."
-    ]
+  "q23": {
+      "question": "How do you react when getting praise/compliments in public?",
+      "answers": {
+          "I take it as validation of my work, finding motivation in recognition.": "#7FB3D5",
+          "I don't like it, preferring to work behind the scenes and stay humble.": "#D98880",
+          "I get uncomfortable when it happens, seeing it as unnecessary attention": "#C39BD3",
+          "I have mixed feelings; I appreciate the praise while worrying about increased expectations and pressure.": "#7DCEA0"
+      }
   },
-  {
-    "question": "How often do you interact with people who are different from you?",
-    "answers": [
-      "Never",
-      "Very infrequently",
-      "Often",
-      "Always"
-    ]
+  "q24": {
+      "question": "How often do you interact with people who are different from you?",
+      "answers": {
+          "Never": "#D98880",
+          "Very infrequently": "#C39BD3",
+          "Often": "#7DCEA0",
+          "Always": "#76D7C4"
+      }
   }
-]
+}

@@ -6,20 +6,15 @@ let dbAnswers = {};
 
 
 function fetchQuestions() {
-    console.log('Attempting to fetch questions');
     fetch('questions.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(questions => {
-        console.log('Questions fetched successfully', questions);
-        setupQuestionnaire(questions);
-      })
-      .catch(error => console.error('Error loading questions:', error));
-  }
+        .then(response => response.json())
+        .then(data => {
+            const questionsArray = Object.values(data); // Converts the questions object to an array
+            setupQuestionnaire(questionsArray);
+        })
+        .catch(error => console.error('Error loading questions:', error));
+}
+
   
 
 function fetchDBQuestions() {
@@ -39,57 +34,71 @@ function fetchDBQuestions() {
 }
 
 function setupQuestionnaire(questions) {
-const container = document.getElementById('questions-container');
+	const container = document.getElementById('questionsContainer');
+	
+    questions.forEach((q, index) => {
+        const questionSection = document.createElement('div');
+        questionSection.classList.add('question-section', 'hidden');
+        questionSection.id = `question${index + 1}`;
 
-questions.forEach((q, index) => {
-    const questionSection = document.createElement('div');
-    questionSection.classList.add('question-section', 'hidden');
-    questionSection.id = `question${index + 1}`;
+        const questionText = document.createElement('p');
+        questionText.classList.add('question');
+        questionText.textContent = q.question;
 
-    const questionText = document.createElement('p');
-    questionText.classList.add('question');
-    questionText.textContent = q.question;
+        const answersDiv = document.createElement('div');
+        answersDiv.classList.add('answers');
 
-    const answersDiv = document.createElement('div');
-    answersDiv.classList.add('answers');
+        Object.entries(q.answers).forEach(([answer, color]) => {
+            const answerButton = document.createElement('button');
+            answerButton.classList.add('answer-button');
+            answerButton.textContent = answer;
+            answerButton.dataset.answer = answer;
+            answerButton.dataset.color = color; // Store the color in dataset for use later
+            answersDiv.appendChild(answerButton);
+        });
 
-    q.answers.forEach(answer => {
-    const answerButton = document.createElement('button');
-    answerButton.classList.add('answer-button');
-    answerButton.textContent = answer;
-    answerButton.dataset.answer = answer;
-    answersDiv.appendChild(answerButton);
+        const nextButton = document.createElement('button');
+        nextButton.classList.add('next-button');
+        nextButton.textContent = 'Next';
+
+        questionSection.appendChild(questionText);
+        questionSection.appendChild(answersDiv);
+        questionSection.appendChild(nextButton);
+
+        container.appendChild(questionSection);
     });
 
-    const nextButton = document.createElement('button');
-    nextButton.classList.add('next-button');
-    nextButton.textContent = 'Next';
-
-    questionSection.appendChild(questionText);
-    questionSection.appendChild(answersDiv);
-    questionSection.appendChild(nextButton);
-
-    container.appendChild(questionSection);
-});
-
-addEventListeners();
+	addEventListeners();
 }
+
 
 function addEventListeners() {
-const startButton = document.getElementById('start-button');
-if (startButton) {
-    startButton.addEventListener('click', function() {
-    document.getElementById('welcome-section').classList.add('hidden');
-    const firstQuestion = document.getElementById('question1');
-    if (firstQuestion) {
-        firstQuestion.classList.remove('hidden');
+    const startButton = document.getElementById('start-button');
+    if (startButton) {
+        startButton.addEventListener('click', function() {
+            document.getElementById('welcome-section').classList.add('hidden');
+            const firstQuestion = document.getElementById('question1');
+            if (firstQuestion) {
+                firstQuestion.classList.remove('hidden');
+            } else {
+                console.error('First question section not found');
+            }
+        });
     } else {
-        console.error('First question section not found');
+        console.error('Start button not found');
     }
+
+    // Adding listeners to answer buttons
+    document.querySelectorAll('.answer-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const questionId = this.dataset.questionId;
+            const selectedAnswer = this.dataset.answer;
+            // Assuming 'applyColorBasedOnAnswer' is your function that colors the SVG
+            applyColorBasedOnAnswer(questionId, selectedAnswer);
+        });
     });
-} else {
-    console.error('Start button not found');
 }
+
 
 document.querySelectorAll('.next-button').forEach((button, index, buttons) => {
     button.addEventListener('click', function() {
@@ -120,6 +129,7 @@ document.querySelectorAll('.answer-button').forEach(button => {
       selectedAnswers[questionIndex] = this.dataset.answer;
       // dbAnswers[questionIndex] = this.DBquestions
   
+<<<<<<< Updated upstream
       // Update the cloned SVG with the selected answer's color
       // const selectedAnswer = this.dataset.answer;
       // const mapping = answerMapping[selectedAnswer];
@@ -129,19 +139,29 @@ document.querySelectorAll('.answer-button').forEach(button => {
       //   console.warn(`No color mapping found for answer: ${selectedAnswer}`);
       // }
   
+=======
+      // Example usage within an event listener or another function
+      const selectedAnswer = this.dataset.answer; // Assuming 'this' refers to the selected answer element
+      const mapping = answerMapping[selectedAnswer];
+      if (mapping && clonedSvg) {
+          colorSegment(mapping.elementId, mapping.color);
+      } else {
+          console.warn(`No color mapping found for answer: ${selectedAnswer}`);
+        }
+
+>>>>>>> Stashed changes
       // Show the current state of the disco ball
       showCurrentDiscoBall();
     });
   });
-  
-}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchQuestions();
     // fetchDBQuestions();
     const DBquestions = JSON.parse(fetchDBQuestions());
 
-    fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
+    fetch('assets/28discoball_custom_30.svg') // Adjust the path to the SVG file
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -172,29 +192,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /**
- * Colors an SVG segment with the provided color.
- * @param {string} elementId - The ID of the SVG element to color.
- * @param {string} color - The color to apply to the element.
+ * Colors an SVG element based on the selected answer for a given question.
+ * @param {string} questionId - The question ID (e.g., 'q1', 'q2').
+ * @param {string} answer - The selected answer text.
  */
-function colorSegment(elementId, color) {
-    const svgElement = clonedSvg.getElementById(elementId); // Use getElementById on the cloned SVG
-    if (svgElement) {
-      svgElement.style.fill = color;
+function applyColorBasedOnAnswer(questionId, answer) {
+    const color = answerMapping[questionId][answer];
+    if (color && clonedSvg) {
+        const svgElement = clonedSvg.querySelector(`#${questionId}`); // Or use .getElementsByClassName if they are classes
+        if (svgElement) {
+            svgElement.style.fill = color;
+        } else {
+            console.warn(`SVG element for ${questionId} not found.`);
+        }
     } else {
-      console.warn(`Element with ID ${elementId} not found in the cloned SVG.`);
+        console.warn(`No color mapping found for answer: ${answer} for question: ${questionId}`);
     }
-  }
-  // Example usage:
-  // colorSegment('visualSegmentId', '#FF0000');
+}
+
 
 function showCurrentDiscoBall() {
     const svgDisplayContainer = document.getElementById('svgDisplayContainer'); // Replace with your actual container ID
     svgDisplayContainer.innerHTML = ''; // Clear any existing content
     svgDisplayContainer.appendChild(clonedSvg); // Append the cloned SVG
 }
-
-// ... call showCurrentDiscoBall() whenever you want to display the updated disco ball
-// (e.g. after each question is answered)  
   
 
 
