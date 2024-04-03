@@ -20,126 +20,151 @@ function fetchQuestions() {
       })
       .catch(error => console.error('Error loading questions:', error));
   }
-  
 
-function fetchDBQuestions() {
-  console.log('Attempting to fetch questions');
-  fetch('questions_db.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(questions => {
-      console.log('Questions fetched successfully', questions);
-      setupQuestionnaire(questions);
-    })
-    .catch(error => console.error('Error loading questions:', error));
-}
 
-function setupQuestionnaire(questions) {
-const container = document.getElementById('questions-container');
+  function setupQuestionnaire(questions) {
+    const container = document.getElementById('questions-container');
 
-questions.forEach((q, index) => {
-    const questionSection = document.createElement('div');
-    questionSection.classList.add('question-section', 'hidden');
-    questionSection.id = `question${index + 1}`;
+    questions.forEach((q, index) => {
+        const questionSection = document.createElement('div');
+        questionSection.classList.add('question-section', 'hidden');
+        questionSection.id = `question${index + 1}`;
 
-    const questionText = document.createElement('p');
-    questionText.classList.add('question');
-    questionText.textContent = q.question;
+        const questionText = document.createElement('p');
+        questionText.classList.add('question');
+        questionText.textContent = q.question;
 
-    const answersDiv = document.createElement('div');
-    answersDiv.classList.add('answers');
+        const answersDiv = document.createElement('div');
+        answersDiv.classList.add('answers');
 
-    q.answers.forEach(answer => {
-    const answerButton = document.createElement('button');
-    answerButton.classList.add('answer-button');
-    answerButton.textContent = answer;
-    answerButton.dataset.answer = answer;
-    answersDiv.appendChild(answerButton);
+        // Check if it's the last question
+        if (index === questions.length - 1) {
+            const participantIdInput = document.createElement('input');
+            participantIdInput.type = 'text';
+            participantIdInput.id = 'participantIdInput';
+            participantIdInput.placeholder = 'Enter Participant ID';
+            answersDiv.appendChild(participantIdInput);
+        } else {
+            // Check if it's a text input question
+            if (q.answers.length === 0) {
+                const textInput = document.createElement('input');
+                textInput.type = 'text';
+                textInput.id = `textInput${index + 1}`;
+                textInput.placeholder = 'Your answer here...';
+                answersDiv.appendChild(textInput);
+            } else {
+                // It's a multiple choice question
+                q.answers.forEach(answerTuple => {
+                    const answerButton = document.createElement('button');
+                    answerButton.classList.add('answer-button');
+                    answerButton.textContent = answerTuple[0]; // Display the text part of the tuple
+                    answerButton.dataset.answer = answerTuple[0]; // Store the text part of the tuple in the dataset
+                    answerButton.dataset.value = answerTuple[1]; // Store the integer part of the tuple in the dataset
+                    answersDiv.appendChild(answerButton);
+                });
+            }
+        }
+
+        const nextButton = document.createElement('button');
+        nextButton.classList.add('next-button');
+        nextButton.textContent = 'Next';
+
+        questionSection.appendChild(questionText);
+        questionSection.appendChild(answersDiv);
+        questionSection.appendChild(nextButton);
+
+        container.appendChild(questionSection);
     });
 
-    const nextButton = document.createElement('button');
-    nextButton.classList.add('next-button');
-    nextButton.textContent = 'Next';
-
-    questionSection.appendChild(questionText);
-    questionSection.appendChild(answersDiv);
-    questionSection.appendChild(nextButton);
-
-    container.appendChild(questionSection);
-});
-
-addEventListeners();
+    addEventListeners();
 }
 
 function addEventListeners() {
-const startButton = document.getElementById('start-button');
-if (startButton) {
-    startButton.addEventListener('click', function() {
-    document.getElementById('welcome-section').classList.add('hidden');
-    const firstQuestion = document.getElementById('question1');
-    if (firstQuestion) {
-        firstQuestion.classList.remove('hidden');
+    const startButton = document.getElementById('start-button');
+    if (startButton) {
+        startButton.addEventListener('click', () => {
+            document.getElementById('welcome-section').classList.add('hidden');
+            const firstQuestion = document.getElementById('question1');
+            if (firstQuestion) {
+                firstQuestion.classList.remove('hidden');
+            } else {
+                console.error('First question section not found');
+            }
+        });
     } else {
-        console.error('First question section not found');
+        console.error('Start button not found');
     }
+
+    document.querySelectorAll('.next-button').forEach((button, index, buttons) => {
+        button.addEventListener('click', () => handleNextButtonClick(button, index, buttons));
     });
-} else {
-    console.error('Start button not found');
+
+    document.querySelectorAll('.answer-button').forEach(button => {
+        button.addEventListener('click', handleAnswerButtonClick);
+    });
 }
 
-document.querySelectorAll('.next-button').forEach((button, index, buttons) => {
-    button.addEventListener('click', function() {
-    const currentSection = document.getElementById(`question${index + 1}`);
-    const nextSection = document.getElementById(`question${index + 2}`);
+function handleNextButtonClick(button, index, buttons) {
+    const isLastQuestion = index + 1 === buttons.length;
+    const selectedAnswerButton = button.parentElement.querySelector('.answer-button.selected');
+
+    // Check if it's the last question
+    if (isLastQuestion) {
+        const participantIdInput = document.getElementById('participantIdInput');
+        if (participantIdInput.value.trim() === '') {
+            alert('Please enter your Participant ID before proceeding.');
+            return;
+        } else {
+            const questionIndex = button.closest('.question-section').id.replace('question', '');
+            dbAnswers[questionIndex] = participantIdInput.value.trim();
+        }
+    } else {
+        // Proceed with the rest of the logic for handling multiple-choice questions
+        if (!selectedAnswerButton) {
+            alert('Please select an answer before proceeding to the next question.');
+            return;
+        }
+        const selectedIntegerValue = selectedAnswerButton.dataset.value;
+        const questionIndex = button.closest('.question-section').id.replace('question', '');
+        dbAnswers[questionIndex] = parseInt(selectedIntegerValue);
+    }
+
+    // Rest of the code remains unchanged
+    const currentSection = button.parentElement;
     if (currentSection) {
         currentSection.classList.add('hidden');
     }
+
+    const nextSection = currentSection.nextElementSibling;
     if (nextSection) {
         nextSection.classList.remove('hidden');
-    } else if (index + 1 === buttons.length) {
+    } else if (isLastQuestion) {
         console.log('End of the questionnaire');
         submitForm();
     }
-    });
-});
-
-document.querySelectorAll('.answer-button').forEach(button => {
-    button.addEventListener('click', function() {
-      // Remove 'selected' from all buttons in this answer group
-      this.parentElement.querySelectorAll('.answer-button').forEach(btn => {
-        btn.classList.remove('selected');
-      });
-      this.classList.add('selected');
-  
-      // Store the selected answer
-      const questionIndex = this.closest('.question-section').id.replace('question', '');
-      selectedAnswers[questionIndex] = this.dataset.answer;
-      // dbAnswers[questionIndex] = this.DBquestions
-  
-      // Update the cloned SVG with the selected answer's color
-      // const selectedAnswer = this.dataset.answer;
-      // const mapping = answerMapping[selectedAnswer];
-      // if (mapping && clonedSvg) {
-      //   colorSegment(mapping.elementId, mapping.color);
-      // } else {
-      //   console.warn(`No color mapping found for answer: ${selectedAnswer}`);
-      // }
-  
-      // Show the current state of the disco ball
-      showCurrentDiscoBall();
-    });
-  });
-  
 }
+
+
+function handleAnswerButtonClick() {
+    // Remove 'selected' from all buttons in this answer group
+    this.parentElement.querySelectorAll('.answer-button').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    this.classList.add('selected');
+
+    // Store the selected answer
+    const questionIndex = this.closest('.question-section').id.replace('question', '');
+    selectedAnswers[questionIndex] = this.dataset.answer;
+
+    // Show the current state of the disco ball
+    showCurrentDiscoBall();
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchQuestions();
     // fetchDBQuestions();
-    const DBquestions = JSON.parse(fetchDBQuestions());
+    const DBquestions = JSON.parse(fetchQuestions());
 
     fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
         .then(response => {
@@ -278,33 +303,39 @@ function showCurrentDiscoBall() {
 
 // Assuming this function is called when all questions are answered
 function submitForm() {
-  // Convert selectedAnswers object to an array
-  const answersArray = Object.values(dbAnswers);
+    // Convert selectedAnswers object to an array
+    const answersArray = Object.values(dbAnswers);
   
-  // Send data to server-side script
-  fetch('/save-form-data', {
+    // Display the response integers
+    const responseDisplay = document.getElementById('response-display');
+    responseDisplay.textContent = 'Response Integers: ' + answersArray.join(', ');
+  
+    // Send data to server-side script
+    fetch('/save-form-data', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ answers: answersArray })
-  })
-  .then(response => {
+    })
+    .then(response => {
       if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();
-  })
-  .then(data => {
+    })
+    .then(data => {
       console.log('Form data saved successfully:', data);
       // Optionally, perform any actions based on the server's response
-  })
-  .catch(error => console.error('Error saving form data:', error));
+    })
+    .catch(error => console.error('Error saving form data:', error));
 }
+  
 
 
 
 // Assuming you're using Node.js with Express
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
@@ -353,7 +384,6 @@ app.post('/save-form-data', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
 
 // database connection 
 // const mysql = require('mysql');
