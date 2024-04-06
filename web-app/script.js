@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clonedSvg.id = 'clonedSvgId';
 
             // Show the cloned SVG after it's initialized
-            showCurrentDiscoBall();
+            // showCurrentDiscoBall();
 
             // Continue with any additional initialization...
         })
@@ -113,13 +113,31 @@ function fetchQuestions() {
         answersDiv.classList.add('answers');
 
         // Check if it's the last question
+        // if (index === questions.length - 1) {
+        //     const participantIdInput = document.createElement('input');
+        //     participantIdInput.type = 'text';
+        //     participantIdInput.id = 'participantIdInput';
+        //     participantIdInput.placeholder = 'Enter Participant ID';
+        //     answersDiv.appendChild(participantIdInput);
+        // } 
         if (index === questions.length - 1) {
-            const participantIdInput = document.createElement('input');
-            participantIdInput.type = 'text';
-            participantIdInput.id = 'participantIdInput';
-            participantIdInput.placeholder = 'Enter Participant ID';
-            answersDiv.appendChild(participantIdInput);
-        } else {
+            // Create a div to hold the multiple-choice options
+            const participantIdOptionsDiv = document.createElement('div');
+            participantIdOptionsDiv.classList.add('participant-id-options');
+        
+            // Create buttons for each option
+            for (let i = 1; i <= 20; i++) {
+                const optionButton = document.createElement('button');
+                optionButton.classList.add('option-button');
+                optionButton.textContent = i.toString(); // Option button text is the option number
+                optionButton.dataset.value = i; // Store the option value in the dataset
+                optionButton.addEventListener('click', handleOptionButtonClick); // Add event listener to handle option click
+                participantIdOptionsDiv.appendChild(optionButton);
+            }
+        
+            answersDiv.appendChild(participantIdOptionsDiv);
+        }
+        else {
             // Check if it's a text input question
             if (q.answers.length === 0) {
                 const textInput = document.createElement('input');
@@ -179,6 +197,32 @@ function addEventListeners() {
     });
 }
 
+function handleOptionButtonClick() {
+    // Remove 'selected' class from all buttons in the same group
+    const optionButtons = this.parentElement.querySelectorAll('.option-button');
+    optionButtons.forEach(button => {
+        button.classList.remove('selected');
+    });
+
+    // Add 'selected' class to the clicked button
+    this.classList.add('selected');
+
+    // Store the selected option value
+    const questionIndex = this.closest('.question-section').id.replace('question', '');
+    if (this.classList.contains('selected')) {
+        // If the button is selected, store its value
+        dbAnswers[questionIndex] = parseInt(this.dataset.value);
+    } else {
+        // If the button is deselected, remove its value from dbAnswers
+        delete dbAnswers[questionIndex];
+    }
+
+    // // Store the selected option value
+    // const questionIndex = this.closest('.question-section').id.replace('question', '');
+    // dbAnswers[questionIndex] = parseInt(this.dataset.value);
+
+}
+
 function handleNextButtonClick(button, index, buttons) {
     const isLastQuestion = index + 1 === buttons.length;
     const selectedAnswerButton = button.parentElement.querySelector('.answer-button.selected');
@@ -232,7 +276,7 @@ function handleAnswerButtonClick() {
     selectedAnswers[questionIndex] = this.dataset.answer;
 
     // Show the current state of the disco ball
-    showCurrentDiscoBall();
+    // showCurrentDiscoBall();
 }
 
 
@@ -287,19 +331,19 @@ function colorSegment(elementId, color) {
   // Example usage:
   // colorSegment('visualSegmentId', '#FF0000');
 
-function showCurrentDiscoBall() {
-    const svgDisplayContainer = document.getElementById('svgDisplayContainer'); // Replace with your actual container ID
-    svgDisplayContainer.innerHTML = ''; // Clear any existing content
-    // svgDisplayContainer.appendChild(clonedSvg); 
+// function showCurrentDiscoBall() {
+//     const svgDisplayContainer = document.getElementById('svgDisplayContainer'); // Replace with your actual container ID
+//     svgDisplayContainer.innerHTML = ''; // Clear any existing content
+//     // svgDisplayContainer.appendChild(clonedSvg); 
 
     
-    // Check if clonedSvg is null or undefined
-    if (clonedSvg) {
-        svgDisplayContainer.appendChild(clonedSvg); // Append the cloned SVG
-    } else {
-        console.error('clonedSvg is null or undefined');
-    }
-}
+//     // Check if clonedSvg is null or undefined
+//     if (clonedSvg) {
+//         svgDisplayContainer.appendChild(clonedSvg); // Append the cloned SVG
+//     } else {
+//         console.error('clonedSvg is null or undefined');
+//     }
+// }
 
 // ... call showCurrentDiscoBall() whenever you want to display the updated disco ball
 // (e.g. after each question is answered)  
