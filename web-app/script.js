@@ -4,6 +4,35 @@ const selectedAnswers = {};
 
 let dbAnswers = {};
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetchQuestions(); // Start fetching questions
+//     fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error(`HTTP error! status: ${response.status}`);
+//             }
+//             return response.text();
+//         })
+//         .then(svgData => {
+//             const svgContainer = document.getElementById('svgContainer');
+//             svgContainer.innerHTML = svgData;
+//             // This is your original SVG now part of the DOM
+//             const originalSvg = svgContainer.querySelector('svg');
+            
+//             // Assign a new ID to your original SVG if necessary
+//             originalSvg.id = 'originalSvgId'; 
+
+//             // Make a copy of the SVG for manipulation
+//             clonedSvg = originalSvg.cloneNode(true);
+//             // Assign a new ID to the cloned SVG to differentiate it
+//             clonedSvg.id = 'clonedSvgId';
+
+//             // Continue with any additional initialization...
+//         })
+//         .catch(error => console.error('Error loading SVG:', error));
+
+// });
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchQuestions(); // Start fetching questions
     fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
@@ -27,10 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Assign a new ID to the cloned SVG to differentiate it
             clonedSvg.id = 'clonedSvgId';
 
+            // Show the cloned SVG after it's initialized
+            showCurrentDiscoBall();
+
             // Continue with any additional initialization...
         })
         .catch(error => console.error('Error loading SVG:', error));
-
 });
 
 function fetchQuestions() {
