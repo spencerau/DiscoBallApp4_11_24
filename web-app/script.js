@@ -4,6 +4,34 @@ const selectedAnswers = {};
 
 let dbAnswers = {};
 
+document.addEventListener('DOMContentLoaded', () => {
+    fetchQuestions(); // Start fetching questions
+    fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(svgData => {
+            const svgContainer = document.getElementById('svgContainer');
+            svgContainer.innerHTML = svgData;
+            // This is your original SVG now part of the DOM
+            const originalSvg = svgContainer.querySelector('svg');
+            
+            // Assign a new ID to your original SVG if necessary
+            originalSvg.id = 'originalSvgId'; 
+
+            // Make a copy of the SVG for manipulation
+            clonedSvg = originalSvg.cloneNode(true);
+            // Assign a new ID to the cloned SVG to differentiate it
+            clonedSvg.id = 'clonedSvgId';
+
+            // Continue with any additional initialization...
+        })
+        .catch(error => console.error('Error loading SVG:', error));
+
+});
 
 function fetchQuestions() {
     console.log('Attempting to fetch questions');
@@ -19,7 +47,23 @@ function fetchQuestions() {
         setupQuestionnaire(questions);
       })
       .catch(error => console.error('Error loading questions:', error));
-  }
+}
+
+// function fetchQuestions() {
+//     console.log('Attempting to fetch questions');
+//     fetch('questions.json')
+//       .then(response => {
+//         if (!response.ok) {
+//           throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//         return response.json();
+//       })
+//       .then(questions => {
+//         console.log('Questions fetched successfully', questions);
+//         setupQuestionnaire(questions);
+//       })
+//       .catch(error => console.error('Error loading questions:', error));
+//   }
 
 
   function setupQuestionnaire(questions) {
@@ -215,7 +259,15 @@ function colorSegment(elementId, color) {
 function showCurrentDiscoBall() {
     const svgDisplayContainer = document.getElementById('svgDisplayContainer'); // Replace with your actual container ID
     svgDisplayContainer.innerHTML = ''; // Clear any existing content
-    svgDisplayContainer.appendChild(clonedSvg); // Append the cloned SVG
+    // svgDisplayContainer.appendChild(clonedSvg); 
+
+    
+    // Check if clonedSvg is null or undefined
+    if (clonedSvg) {
+        svgDisplayContainer.appendChild(clonedSvg); // Append the cloned SVG
+    } else {
+        console.error('clonedSvg is null or undefined');
+    }
 }
 
 // ... call showCurrentDiscoBall() whenever you want to display the updated disco ball
