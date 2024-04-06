@@ -120,42 +120,44 @@ function fetchQuestions() {
         //     participantIdInput.placeholder = 'Enter Participant ID';
         //     answersDiv.appendChild(participantIdInput);
         // } 
-        if (index === questions.length - 1) {
-            // Create a div to hold the multiple-choice options
-            const participantIdOptionsDiv = document.createElement('div');
-            participantIdOptionsDiv.classList.add('participant-id-options');
+        // if (index === questions.length - 1) {
+        //     // Create a div to hold the multiple-choice options
+        //     const participantIdOptionsDiv = document.createElement('div');
+        //     participantIdOptionsDiv.classList.add('participant-id-options');
         
-            // Create buttons for each option
-            for (let i = 1; i <= 20; i++) {
-                const optionButton = document.createElement('button');
-                optionButton.classList.add('option-button');
-                optionButton.textContent = i.toString(); // Option button text is the option number
-                optionButton.dataset.value = i; // Store the option value in the dataset
-                optionButton.addEventListener('click', handleOptionButtonClick); // Add event listener to handle option click
-                participantIdOptionsDiv.appendChild(optionButton);
-            }
+        //     // Create buttons for each option
+        //     for (let i = 1; i <= 20; i++) {
+        //         const optionButton = document.createElement('button');
+        //         optionButton.classList.add('option-button');
+        //         optionButton.textContent = i.toString(); // Option button text is the option number
+        //         optionButton.dataset.value = i; // Store the option value in the dataset
+        //         optionButton.addEventListener('click', handleOptionButtonClick); // Add event listener to handle option click
+        //         participantIdOptionsDiv.appendChild(optionButton);
+        //     }
         
-            answersDiv.appendChild(participantIdOptionsDiv);
-        }
-        else {
-            // Check if it's a text input question
-            if (q.answers.length === 0) {
-                const textInput = document.createElement('input');
-                textInput.type = 'text';
-                textInput.id = `textInput${index + 1}`;
-                textInput.placeholder = 'Your answer here...';
-                answersDiv.appendChild(textInput);
-            } else {
-                // It's a multiple choice question
-                q.answers.forEach(answerTuple => {
-                    const answerButton = document.createElement('button');
-                    answerButton.classList.add('answer-button');
-                    answerButton.textContent = answerTuple[0]; // Display the text part of the tuple
-                    answerButton.dataset.answer = answerTuple[0]; // Store the text part of the tuple in the dataset
-                    answerButton.dataset.value = answerTuple[1]; // Store the integer part of the tuple in the dataset
-                    answersDiv.appendChild(answerButton);
-                });
-            }
+        //     answersDiv.appendChild(participantIdOptionsDiv);
+        // }
+        // else {
+        //     // Check if it's a text input question
+            
+        // }
+
+        if (q.answers.length === 0) {
+            const textInput = document.createElement('input');
+            textInput.type = 'text';
+            textInput.id = `textInput${index + 1}`;
+            textInput.placeholder = 'Your answer here...';
+            answersDiv.appendChild(textInput);
+        } else {
+            // It's a multiple choice question
+            q.answers.forEach(answerTuple => {
+                const answerButton = document.createElement('button');
+                answerButton.classList.add('answer-button');
+                answerButton.textContent = answerTuple[0]; // Display the text part of the tuple
+                answerButton.dataset.answer = answerTuple[0]; // Store the text part of the tuple in the dataset
+                answerButton.dataset.value = answerTuple[1]; // Store the integer part of the tuple in the dataset
+                answersDiv.appendChild(answerButton);
+            });
         }
 
         const nextButton = document.createElement('button');
@@ -228,25 +230,27 @@ function handleNextButtonClick(button, index, buttons) {
     const selectedAnswerButton = button.parentElement.querySelector('.answer-button.selected');
 
     // Check if it's the last question
-    if (isLastQuestion) {
-        const participantIdInput = document.getElementById('participantIdInput');
-        if (participantIdInput.value.trim() === '') {
-            alert('Please enter your Participant ID before proceeding.');
-            return;
-        } else {
-            const questionIndex = button.closest('.question-section').id.replace('question', '');
-            dbAnswers[questionIndex] = participantIdInput.value.trim();
-        }
-    } else {
-        // Proceed with the rest of the logic for handling multiple-choice questions
-        if (!selectedAnswerButton) {
-            alert('Please select an answer before proceeding to the next question.');
-            return;
-        }
-        const selectedIntegerValue = selectedAnswerButton.dataset.value;
-        const questionIndex = button.closest('.question-section').id.replace('question', '');
-        dbAnswers[questionIndex] = parseInt(selectedIntegerValue);
+    // if (isLastQuestion) {
+    //     const participantIdInput = document.getElementById('participantIdInput');
+    //     if (participantIdInput.value.trim() === '') {
+    //         alert('Please enter your Participant ID before proceeding.');
+    //         return;
+    //     } else {
+    //         const questionIndex = button.closest('.question-section').id.replace('question', '');
+    //         dbAnswers[questionIndex] = participantIdInput.value.trim();
+    //     }
+    // } else {
+        
+    // }
+
+    // Proceed with the rest of the logic for handling multiple-choice questions
+    if (!selectedAnswerButton) {
+        alert('Please select an answer before proceeding to the next question.');
+        return;
     }
+    const selectedIntegerValue = selectedAnswerButton.dataset.value;
+    const questionIndex = button.closest('.question-section').id.replace('question', '');
+    dbAnswers[questionIndex] = parseInt(selectedIntegerValue);
 
     // Rest of the code remains unchanged
     const currentSection = button.parentElement;
@@ -482,7 +486,7 @@ app.post('/save-form-data', (req, res) => {
         host: host,
         user: user,
         password: password,
-        database: database
+        database: mydatabase
     });
 
     connection.connect(err => {
@@ -520,7 +524,7 @@ function connectToMySQL(host, user, password, database) {
         host: host,
         user: user,
         password: password,
-        database: database
+        database: mydatabase
     });
     connection.connect((err) => {
         if (err) {
@@ -541,7 +545,7 @@ function createCursor(connection) {
 const host = '35.185.219.33';
 const user = 'root';
 const password = 'myname';
-const database = 'celebratory-tech';
+const database = 'mydatabase';
 // Connect to MySQL server
 const connection = connectToMySQL(host, user, password, database);
 // Create a query cursor
