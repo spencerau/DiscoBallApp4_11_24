@@ -1,37 +1,9 @@
+
 // Global variables
 let clonedSvg = null;
 const selectedAnswers = {};
 
 let dbAnswers = {};
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     fetchQuestions(); // Start fetching questions
-//     fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`HTTP error! status: ${response.status}`);
-//             }
-//             return response.text();
-//         })
-//         .then(svgData => {
-//             const svgContainer = document.getElementById('svgContainer');
-//             svgContainer.innerHTML = svgData;
-//             // This is your original SVG now part of the DOM
-//             const originalSvg = svgContainer.querySelector('svg');
-            
-//             // Assign a new ID to your original SVG if necessary
-//             originalSvg.id = 'originalSvgId'; 
-
-//             // Make a copy of the SVG for manipulation
-//             clonedSvg = originalSvg.cloneNode(true);
-//             // Assign a new ID to the cloned SVG to differentiate it
-//             clonedSvg.id = 'clonedSvgId';
-
-//             // Continue with any additional initialization...
-//         })
-//         .catch(error => console.error('Error loading SVG:', error));
-
-// });
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchQuestions(); // Start fetching questions
@@ -80,21 +52,7 @@ function fetchQuestions() {
       .catch(error => console.error('Error loading questions:', error));
 }
 
-// function fetchQuestions() {
-//     console.log('Attempting to fetch questions');
-//     fetch('questions.json')
-//       .then(response => {
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         return response.json();
-//       })
-//       .then(questions => {
-//         console.log('Questions fetched successfully', questions);
-//         setupQuestionnaire(questions);
-//       })
-//       .catch(error => console.error('Error loading questions:', error));
-//   }
+
 
 
   function setupQuestionnaire(questions) {
@@ -112,35 +70,7 @@ function fetchQuestions() {
         const answersDiv = document.createElement('div');
         answersDiv.classList.add('answers');
 
-        // Check if it's the last question
-        // if (index === questions.length - 1) {
-        //     const participantIdInput = document.createElement('input');
-        //     participantIdInput.type = 'text';
-        //     participantIdInput.id = 'participantIdInput';
-        //     participantIdInput.placeholder = 'Enter Participant ID';
-        //     answersDiv.appendChild(participantIdInput);
-        // } 
-        // if (index === questions.length - 1) {
-        //     // Create a div to hold the multiple-choice options
-        //     const participantIdOptionsDiv = document.createElement('div');
-        //     participantIdOptionsDiv.classList.add('participant-id-options');
         
-        //     // Create buttons for each option
-        //     for (let i = 1; i <= 20; i++) {
-        //         const optionButton = document.createElement('button');
-        //         optionButton.classList.add('option-button');
-        //         optionButton.textContent = i.toString(); // Option button text is the option number
-        //         optionButton.dataset.value = i; // Store the option value in the dataset
-        //         optionButton.addEventListener('click', handleOptionButtonClick); // Add event listener to handle option click
-        //         participantIdOptionsDiv.appendChild(optionButton);
-        //     }
-        
-        //     answersDiv.appendChild(participantIdOptionsDiv);
-        // }
-        // else {
-        //     // Check if it's a text input question
-            
-        // }
 
         if (q.answers.length === 0) {
             const textInput = document.createElement('input');
@@ -197,32 +127,6 @@ function addEventListeners() {
     document.querySelectorAll('.answer-button').forEach(button => {
         button.addEventListener('click', handleAnswerButtonClick);
     });
-}
-
-function handleOptionButtonClick() {
-    // Remove 'selected' class from all buttons in the same group
-    const optionButtons = this.parentElement.querySelectorAll('.option-button');
-    optionButtons.forEach(button => {
-        button.classList.remove('selected');
-    });
-
-    // Add 'selected' class to the clicked button
-    this.classList.add('selected');
-
-    // Store the selected option value
-    const questionIndex = this.closest('.question-section').id.replace('question', '');
-    if (this.classList.contains('selected')) {
-        // If the button is selected, store its value
-        dbAnswers[questionIndex] = parseInt(this.dataset.value);
-    } else {
-        // If the button is deselected, remove its value from dbAnswers
-        delete dbAnswers[questionIndex];
-    }
-
-    // // Store the selected option value
-    // const questionIndex = this.closest('.question-section').id.replace('question', '');
-    // dbAnswers[questionIndex] = parseInt(this.dataset.value);
-
 }
 
 function handleNextButtonClick(button, index, buttons) {
@@ -325,238 +229,45 @@ function colorSegment(elementId, color) {
       console.warn(`Element with ID ${elementId} not found in the cloned SVG.`);
     }
   }
-  // Example usage:
-  // colorSegment('visualSegmentId', '#FF0000');
-
-// function showCurrentDiscoBall() {
-//     const svgDisplayContainer = document.getElementById('svgDisplayContainer'); // Replace with your actual container ID
-//     svgDisplayContainer.innerHTML = ''; // Clear any existing content
-//     // svgDisplayContainer.appendChild(clonedSvg); 
-
-    
-//     // Check if clonedSvg is null or undefined
-//     if (clonedSvg) {
-//         svgDisplayContainer.appendChild(clonedSvg); // Append the cloned SVG
-//     } else {
-//         console.error('clonedSvg is null or undefined');
-//     }
-// }
-
-// ... call showCurrentDiscoBall() whenever you want to display the updated disco ball
-// (e.g. after each question is answered)  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // function to put into the database (FIX)
-// app.put("/registro", jsonParser, function (req, res) {
-//   var email = req.body.email;
-//   // llamar a la funcion encriptar para encriptar la contrasena 
-//   var password = (0, encriptacion_1.encriptar)(req.body.password);
-//   var puntos = req.body.puntos;
-//   connection.query("INSERT INTO Usuario (email,password,puntos) VALUES (?,?,?)", [email, password, puntos], function (error, results, fields) {
-//       if (error)
-//           throw error;
-//       res.send(JSON.stringify({ "mensaje": true, "resultado": results }));
-//   });
-// });
-
-
-
-// formValues = {
-//   Usuario_email: this.signInService.signInData.email,
-//   gusto1: 0,
-//   gusto2: 0,
-//   gusto3: 0,
-//   gusto4: 0,
-//   gusto5: 0
-// };
-
-// // make a funcion for each radio button 
-// public pregunta1(): void {
-//   this.formValues.gusto1 = 1;
-// }
-
-// public pregunta2(): void {
-//   this.formValues.gusto2 = 1;
-// }
-
-// public pregunta3(): void {
-//   this.formValues.gusto3 = 1;
-// }
-
-// public pregunta4(): void {
-//   this.formValues.gusto4 = 1;
-// }
-
-// public pregunta5(): void {
-//   this.formValues.gusto5 = 1;
-// }
-
-
-// public ingresarDatos(): void {
-    
-//   const apiUrl = 'http://localhost:3000';
-//   const url = `${apiUrl}/formulario`; 
-//   this.http.post<ApiResponse>(url, this.formValues).subscribe(
-//     () => {
-//       // Handle success
-//       console.log('Form data saved successfully!');
-//       console.log("form values");
-//       console.log(this.formValues);
-//     },
-//     (error) => {
-//       // Handle error
-//       console.error('Error saving form data:', error);
-//     }
-//   );
-
-// }
-
-
+   
 // Assuming this function is called when all questions are answered
 function submitForm() {
     // Convert dbAnswers object to an array
     const answersArray = Object.values(dbAnswers);
 
-    // Create a connection to the MySQL server
-    const connection = mysql.createConnection({
-        host: '35.185.219.33',
-        user: 'root',
-        password: 'myname',
-        database: 'mydatabase'
-    });
-
-    // Connect to the MySQL server
-    connection.connect((err) => {
-        if (err) {
-            console.error('Error connecting to MySQL server:', err);
-            return;
+    // Make an HTTP POST request to the server
+    fetch('http://localhost:3000/submit-form', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            // Send the answers array to the server
+            answers: answersArray
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to submit form');
         }
-        console.log('Connected to MySQL server successfully!');
-
-        // Prepare the INSERT statement
-        const sql = `INSERT INTO Responses 
-                    (Question1, Question2, Question3, Question4, Question5, Question6, Question7, Question8, Question9, 
-                    Question10, Question11, Question12, Question13, Question14, Question15, Question16, Question17, 
-                    Question18, Question19, Question20, Question21, Question22, Question23, Question24, Question25, 
-                    Question26, Question27, Question28, Question29, Question30, UserID)
-                    VALUES
-                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-        // Execute the INSERT statement
-        connection.query(sql, [...answersArray, 'userID'], (err, result) => {
-            if (err) {
-                console.error('Error inserting form data:', err);
-                return;
-            }
-            console.log('Form data saved to database');
-
-            // Close the connection when done
-            connection.end();
-        });
+        return response.json(); // Assuming the server sends JSON response
+    })
+    .then(data => {
+        console.log('Form data submitted successfully:', data);
+        // Handle success, if needed
+    })
+    .catch(error => {
+        console.error('Error submitting form:', error);
+        // Handle error, if needed
     });
+
+
 }
 
-  
 
 
 
-// Assuming you're using Node.js with Express
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
 
-const app = express();
-const port = 3000;
 
-// Middleware to parse JSON body
-app.use(bodyParser.json());
 
-// Route handler to save form data
-app.post('/save-form-data', (req, res) => {
-    const formData = req.body.answers;
-
-    // Connect to MySQL server
-    const connection = mysql.createConnection({
-        host: host,
-        user: user,
-        password: password,
-        database: mydatabase
-    });
-
-    connection.connect(err => {
-        if (err) {
-            console.error('Error connecting to MySQL server:', err);
-            res.status(500).send('Error connecting to database');
-            return;
-        }
-
-        // Insert form data into database
-        const sql = 'INSERT INTO responses (answers) VALUES (?)';
-        connection.query(sql, [JSON.stringify(formData)], (err, result) => {
-            if (err) {
-                console.error('Error inserting form data:', err);
-                res.status(500).send('Error inserting form data');
-                return;
-            }
-
-            console.log('Form data saved to database');
-            res.status(200).json({ message: 'Form data saved successfully' });
-        });
-    });
-});
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
-
-// database connection 
-// const mysql = require('mysql');
-// Function to create a connection to the MySQL server
-function connectToMySQL(host, user, password, database) {
-    const connection = mysql.createConnection({
-        host: host,
-        user: user,
-        password: password,
-        database: mydatabase
-    });
-    connection.connect((err) => {
-        if (err) {
-            console.error('Error connecting to MySQL server: ' + err.stack);
-            return;
-        }
-        console.log('Connected to MySQL server successfully!');
-    });
-    return connection;
-}
-// Function to create a query cursor
-function createCursor(connection) {
-    const cursor = connection.query();
-    console.log('Cursor created successfully!');
-    return cursor;
-}
-// Example usage
-const host = '35.185.219.33';
-const user = 'root';
-const password = 'myname';
-const database = 'mydatabase';
-// Connect to MySQL server
-const connection = connectToMySQL(host, user, password, database);
-// Create a query cursor
-const cursor = createCursor(connection);
-// Close connection when done
-connection.end();

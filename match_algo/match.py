@@ -3,12 +3,12 @@ import os
 import mysql.connector
 
 # Connect to MySQL database
-connection = mysql.connector.connect(
-    host="35.185.219.33",
-    user="root",
-    password="myname",
-    database="mydatabase"
-)
+# connection = mysql.connector.connect(
+#     host="35.185.219.33",
+#     user="root",
+#     password="myname",
+#     database="Resoponses"
+# )
 
 # Create a cursor object
 cursor = connection.cursor()
@@ -42,6 +42,8 @@ for j in range(20):
 print("Groups Round 1:", groups_round1_random)
 
 # import the data from the database 
+data = open("data.csv", "r")
+
 
 # Round 2
 # based on MIXED communication styles (across the spectrum of different answers)
@@ -50,41 +52,44 @@ print("Groups Round 1:", groups_round1_random)
 users_2 = {}
 top_matches_2 = {}
 
-for i in range(1, 21):
-    user_id = '{:03d}'.format(i)
-    user_response = '''
-        SELECT * FROM Responses WHERE UserID = '{}'
-        '''.format(user_id)
-    cursor.execute(user_response)
-    user_answer = cursor.fetchone()
+# loop through target questions and add them into dictionary 
+# TO DO: GET DATA FROM CSV FILE 
+
+# for i in range(1, 21):
+#     user_id = '{:03d}'.format(i)
+#     user_response = '''
+#         SELECT * FROM Responses WHERE UserID = '{}'
+#         '''.format(user_id)
+#     cursor.execute(user_response)
+#     user_answer = cursor.fetchone()
     # print(user_answer)
 #  Add in last 6 questions
-    query = '''
-    SELECT UserID,
-        (CASE WHEN Question1 = '{0}' THEN 1 ELSE 0 END +
-            CASE WHEN Question8 = '{1}' THEN 1 ELSE 0 END +
-            CASE WHEN Question11 = '{2}' THEN 1 ELSE 0 END +
-            CASE WHEN Question21 = '{3}' THEN 1 ELSE 0 END +
-            CASE WHEN Question25 = '{4}' THEN 1 ELSE 0 END +
-            CASE WHEN Question26 = '{5}' THEN 1 ELSE 0 END +
-            CASE WHEN Question27 = '{6}' THEN 1 ELSE 0 END +
-            CASE WHEN Question28 = '{7}' THEN 1 ELSE 0 END +
-            CASE WHEN Question29 = '{8}' THEN 1 ELSE 0 END +
-            CASE WHEN Question30 = '{9}' THEN 1 ELSE 0 END) AS match_score
-    FROM Responses
-    WHERE UserID != '{10}'
-    ORDER BY match_score ASC
-    LIMIT 5;
-    '''.format(user_answer[1], user_answer[8], user_answer[11], user_answer[21], user_answer[25], user_answer[26], user_answer[27], user_answer[28], user_answer[29], user_answer[30], user_answer[31] )
+#     query = '''
+#     SELECT UserID,
+#         (CASE WHEN Question1 = '{0}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question8 = '{1}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question11 = '{2}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question21 = '{3}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question25 = '{4}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question26 = '{5}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question27 = '{6}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question28 = '{7}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question29 = '{8}' THEN 1 ELSE 0 END +
+#             CASE WHEN Question30 = '{9}' THEN 1 ELSE 0 END) AS match_score
+#     FROM Responses
+#     WHERE UserID != '{10}'
+#     ORDER BY match_score ASC
+#     LIMIT 5;
+#     '''.format(user_answer[1], user_answer[8], user_answer[11], user_answer[21], user_answer[25], user_answer[26], user_answer[27], user_answer[28], user_answer[29], user_answer[30], user_answer[31] )
 
-    cursor.execute(query)
-    user_match = cursor.fetchall()
+#     cursor.execute(query)
+#     user_match = cursor.fetchall()
 
-    matched_user_ids = [match[0] for match in user_match]
-    users_2[i] = matched_user_ids
+#     matched_user_ids = [match[0] for match in user_match]
+#     users_2[i] = matched_user_ids
     
-cursor.close()
-connection.close()
+# cursor.close()
+# connection.close()
 
 for user_id in users_2:
     top_matches_2[user_id] = users_2[user_id]

@@ -262,10 +262,9 @@
     "question": "I would describe my primary expression of patience as:",
     "answers": [
         ["Endless patience for others", 1],
-        ["Exercising patience with myself", 2],
-        ["No time to be patient", 3],
-        ["Sometimes patient", 4],
-        ["No time left to be patient", 5]
+        ["Patient most of the time", 2],
+        ["I struggle to be patient with others", 3],
+        ["I have no patience", 4]
     ]
 },
 {
