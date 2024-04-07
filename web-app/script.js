@@ -229,20 +229,6 @@ function handleNextButtonClick(button, index, buttons) {
     const isLastQuestion = index + 1 === buttons.length;
     const selectedAnswerButton = button.parentElement.querySelector('.answer-button.selected');
 
-    // Check if it's the last question
-    // if (isLastQuestion) {
-    //     const participantIdInput = document.getElementById('participantIdInput');
-    //     if (participantIdInput.value.trim() === '') {
-    //         alert('Please enter your Participant ID before proceeding.');
-    //         return;
-    //     } else {
-    //         const questionIndex = button.closest('.question-section').id.replace('question', '');
-    //         dbAnswers[questionIndex] = participantIdInput.value.trim();
-    //     }
-    // } else {
-        
-    // }
-
     // Proceed with the rest of the logic for handling multiple-choice questions
     if (!selectedAnswerButton) {
         alert('Please select an answer before proceeding to the next question.');
@@ -252,7 +238,14 @@ function handleNextButtonClick(button, index, buttons) {
     const questionIndex = button.closest('.question-section').id.replace('question', '');
     dbAnswers[questionIndex] = parseInt(selectedIntegerValue);
 
-    // Rest of the code remains unchanged
+    // Check if it's the last question
+    if (isLastQuestion) {
+        // Process the final question differently
+        submitForm();
+        return; // Exit the function to prevent further execution
+    }
+
+    // Move to the next question
     const currentSection = button.parentElement;
     if (currentSection) {
         currentSection.classList.add('hidden');
@@ -261,11 +254,11 @@ function handleNextButtonClick(button, index, buttons) {
     const nextSection = currentSection.nextElementSibling;
     if (nextSection) {
         nextSection.classList.remove('hidden');
-    } else if (isLastQuestion) {
-        console.log('End of the questionnaire');
-        submitForm();
+    } else {
+        console.error('Next question section not found');
     }
 }
+
 
 
 function handleAnswerButtonClick() {
@@ -434,33 +427,48 @@ function colorSegment(elementId, color) {
 
 // Assuming this function is called when all questions are answered
 function submitForm() {
-    // Convert selectedAnswers object to an array
+    // Convert dbAnswers object to an array
     const answersArray = Object.values(dbAnswers);
-  
-    // Display the response integers
-    const responseDisplay = document.getElementById('response-display');
-    responseDisplay.textContent = 'Response Integers: ' + answersArray.join(', ');
-  
-    // Send data to server-side script
-    fetch('/save-form-data', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ answers: answersArray })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Form data saved successfully:', data);
-      // Optionally, perform any actions based on the server's response
-    })
-    .catch(error => console.error('Error saving form data:', error));
+
+    // Create a connection to the MySQL server
+    const connection = mysql.createConnection({
+        host: '35.185.219.33',
+        user: 'root',
+        password: 'myname',
+        database: 'mydatabase'
+    });
+
+    // Connect to the MySQL server
+    connection.connect((err) => {
+        if (err) {
+            console.error('Error connecting to MySQL server:', err);
+            return;
+        }
+        console.log('Connected to MySQL server successfully!');
+
+        // Prepare the INSERT statement
+        const sql = `INSERT INTO Responses 
+                    (Question1, Question2, Question3, Question4, Question5, Question6, Question7, Question8, Question9, 
+                    Question10, Question11, Question12, Question13, Question14, Question15, Question16, Question17, 
+                    Question18, Question19, Question20, Question21, Question22, Question23, Question24, Question25, 
+                    Question26, Question27, Question28, Question29, Question30, UserID)
+                    VALUES
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        // Execute the INSERT statement
+        connection.query(sql, [...answersArray, 'userID'], (err, result) => {
+            if (err) {
+                console.error('Error inserting form data:', err);
+                return;
+            }
+            console.log('Form data saved to database');
+
+            // Close the connection when done
+            connection.end();
+        });
+    });
 }
+
   
 
 
