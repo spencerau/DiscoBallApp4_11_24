@@ -285,6 +285,11 @@ function submitForm() {
         }
     }
 
+    // Display the colored SVG
+    const svgDisplayContainer = document.getElementById('svgDisplayContainer');
+    svgDisplayContainer.innerHTML = ''; // Clear the container
+    svgDisplayContainer.appendChild(clonedSvg); // Add the colored SVG to the container
+
     saveSvg(clonedSvg, 'export_discoball.svg');
     
     // Make an HTTP POST request to the server
