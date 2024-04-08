@@ -1,40 +1,21 @@
 
 // Global variables
-let clonedSvg = null;
+let clonedSvg;
 const selectedAnswers = {};
 
 let dbAnswers = {};
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchQuestions(); // Start fetching questions
-    fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(svgData => {
-            const svgContainer = document.getElementById('svgContainer');
-            svgContainer.innerHTML = svgData;
-            // This is your original SVG now part of the DOM
-            const originalSvg = svgContainer.querySelector('svg');
-            
-            // Assign a new ID to your original SVG if necessary
-            originalSvg.id = 'originalSvgId'; 
+let currentQuestionIndex = 0; 
 
-            // Make a copy of the SVG for manipulation
-            clonedSvg = originalSvg.cloneNode(true);
-            // Assign a new ID to the cloned SVG to differentiate it
-            clonedSvg.id = 'clonedSvgId';
+const colorMapping = {
+    1: "#8E44AD", 
+    2: "#3357FF", 
+    3: "#57FF33", 
+    4: "#FF3357", 
+    5: "#F1C40F",
+    6: "#3498DB"
+};
 
-            // Show the cloned SVG after it's initialized
-            // showCurrentDiscoBall();
-
-            // Continue with any additional initialization...
-        })
-        .catch(error => console.error('Error loading SVG:', error));
-});
 
 function fetchQuestions() {
     console.log('Attempting to fetch questions');
@@ -51,8 +32,6 @@ function fetchQuestions() {
       })
       .catch(error => console.error('Error loading questions:', error));
 }
-
-
 
 
   function setupQuestionnaire(questions) {
@@ -104,6 +83,7 @@ function fetchQuestions() {
     addEventListeners();
 }
 
+
 function addEventListeners() {
     const startButton = document.getElementById('start-button');
     if (startButton) {
@@ -129,6 +109,7 @@ function addEventListeners() {
     });
 }
 
+
 function handleNextButtonClick(button, index, buttons) {
     const isLastQuestion = index + 1 === buttons.length;
     const selectedAnswerButton = button.parentElement.querySelector('.answer-button.selected');
@@ -142,8 +123,11 @@ function handleNextButtonClick(button, index, buttons) {
     const questionIndex = button.closest('.question-section').id.replace('question', '');
     dbAnswers[questionIndex] = parseInt(selectedIntegerValue);
 
+    //console.log("QUESTION INDEX: " + questionIndex);
+
     // Check if it's the last question
     if (isLastQuestion) {
+        console.log("About to call submitForm", clonedSvg);
         // Process the final question differently
         submitForm();
         return; // Exit the function to prevent further execution
@@ -164,7 +148,6 @@ function handleNextButtonClick(button, index, buttons) {
 }
 
 
-
 function handleAnswerButtonClick() {
     // Remove 'selected' from all buttons in this answer group
     this.parentElement.querySelectorAll('.answer-button').forEach(btn => {
@@ -181,12 +164,9 @@ function handleAnswerButtonClick() {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchQuestions();
-    // fetchDBQuestions();
-    const DBquestions = JSON.parse(fetchQuestions());
-
-    fetch('../assets/DiscoBallSilver.svg') // Adjust the path to the SVG file
+function fetchAndEmbedSvg(svgPath, containerId, callback) {
+    console.log(`Starting to fetch and embed SVG from: ${svgPath}`);
+    fetch(svgPath)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -194,47 +174,119 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.text();
         })
         .then(svgData => {
-            const svgContainer = document.getElementById('svgContainer');
-            svgContainer.innerHTML = svgData;
-            // This is your original SVG now part of the DOM
-            const originalSvg = svgContainer.querySelector('svg');
-            
-            // Assign a new ID to your original SVG if necessary
-            originalSvg.id = 'originalSvgId'; 
-
-            // Make a copy of the SVG for manipulation
-            clonedSvg = originalSvg.cloneNode(true);
-            // Assign a new ID to the cloned SVG to differentiate it
-            clonedSvg.id = 'clonedSvgId';
-
-            // Append the cloned SVG to the DOM if needed, or keep it off-DOM until needed
-            // document.body.appendChild(clonedSvg); // Uncomment if you want to append it immediately
-
-            // Continue with any additional initialization...
+            const container = document.getElementById(containerId);
+            if (container) {
+                console.log(`Embedding SVG into container: ${containerId}`);
+                container.innerHTML = svgData;
+                console.log(`SVG embedded successfully.`);
+                if (callback) callback();
+            } else {
+                console.error(`Container with ID ${containerId} not found.`);
+            }
         })
-        .catch(error => console.error('Error loading SVG:', error));
-});
+        .catch(error => console.error('Error fetching SVG:', error));
+}
 
 
-/**
- * Colors an SVG segment with the provided color.
- * @param {string} elementId - The ID of the SVG element to color.
- * @param {string} color - The color to apply to the element.
- */
-function colorSegment(elementId, color) {
-    const svgElement = clonedSvg.getElementById(elementId); // Use getElementById on the cloned SVG
-    if (svgElement) {
-      svgElement.style.fill = color;
+
+function cloneSvgElement(containerId) {
+    console.log(`Starting to clone SVG in container: ${containerId}`);
+    const container = document.getElementById(containerId);
+    const originalSvg = container.querySelector('svg');
+    if (originalSvg) {
+        clonedSvg = originalSvg.cloneNode(true);
+        console.log(`SVG cloned successfully.`);
+        
     } else {
-      console.warn(`Element with ID ${elementId} not found in the cloned SVG.`);
+        console.error('Original SVG element not found for cloning.');
     }
-  }
+}
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchQuestions();
+    // fetchDBQuestions();
+    //const DBquestions = JSON.parse(fetchQuestions());
+
+    console.log("Questions Loaded")
+    
+    const svgPath = 'assets/28discoball_custom_30.svg'; 
+    const containerId = 'svgContainer'; // The ID of the container where the SVG will be embedded
+    
+    fetchAndEmbedSvg(svgPath, containerId, function() {
+        cloneSvgElement(containerId);
+    
+    });
+});
+    
+
+function colorSegment(questionIndex, answer) {
+    const classSelector = `.q${questionIndex}`;
+    const color = colorMapping[answer];
+
+    console.log(`Coloring segment: ${classSelector} with color: ${color} for answer: ${answer}`); // Debugging print statement
+
+    const svgElements = clonedSvg.querySelectorAll(classSelector);
+    
+    svgElements.forEach(element => {
+        if (element) {
+            element.style.fill = color;
+        } else {
+            console.warn(`Element with class ${classSelector} not found in cloned SVG.`);
+        }
+    });
+}
+
+
+
+function saveSvg(svgElement, filename) {
+    // Serialize the SVG element to a string
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svgElement);
+
+    // Encode the SVG string in a data URL
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    // Create a temporary anchor element and trigger a download
+    const downloadLink = document.createElement('a');
+    downloadLink.href = svgUrl;
+    downloadLink.download = filename;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink); // Remove the anchor element after triggering the download
+
+    // Clean up the URL object
+    URL.revokeObjectURL(svgUrl);
+}
+
    
 // Assuming this function is called when all questions are answered
 function submitForm() {
     // Convert dbAnswers object to an array
     const answersArray = Object.values(dbAnswers);
 
+    console.log(dbAnswers);
+
+    if (!clonedSvg || !(clonedSvg instanceof SVGSVGElement)) {
+        console.error('Cloned SVG is not ready for saving.');
+        return;
+    }
+
+    for (const [questionIndex, answer] of Object.entries(dbAnswers)) {
+        const color = colorMapping[answer]; // Ensure this resolves to a defined color
+        console.log(`Question index: ${questionIndex}, Answer: ${answer}, Color: ${color}`); // Print statement
+    
+        if (color) {
+            colorSegment(questionIndex, answer);
+        } else {
+            console.error(`No color defined for answer: ${answer}`);
+        }
+    }
+
+    saveSvg(clonedSvg, 'export_discoball.svg');
+    
     // Make an HTTP POST request to the server
     fetch('http://localhost:3000/submit-form', {
         method: 'POST',
