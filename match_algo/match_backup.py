@@ -1,17 +1,23 @@
 import random
 import os
-import mysql.connector
+import pandas as pd
 
-# Connect to MySQL database
-connection = mysql.connector.connect(
-    host="35.185.219.33",
-    user="root",
-    password="myname",
-    database="mydatabase"
-)
+df = pd.read_csv('DiscoBall_Questions_Dummy.csv')
 
-# Create a cursor object
-cursor = connection.cursor()
+# Drop the first row since it contains non-numeric column headers
+df = df.drop(df.index[0])
+
+# Create a list to store the data
+data = []
+
+# Iterate over each row in the DataFrame
+for index, row in df.iterrows():
+    # Extract the last 31 values from the row (excluding the timestamp)
+    user_data = row.iloc[1:-1].tolist()  # Exclude the first and last columns
+    # Append the participant ID as the last value
+    user_data.append(row.iloc[-1])  # Last column is the participant ID
+    # Append the user data to the main list
+    data.append(user_data)
 
 # matching algorithm for iterations of participant kahoot testing
 participants = [i for i in range(1, 21)]
@@ -47,50 +53,45 @@ print("Groups Round 1:", groups_round1_random)
 # based on MIXED communication styles (across the spectrum of different answers)
 
 # Construct the SQL query to fetch user response
-users_2 = {}
+# Define a function to calculate the match score between two users
+def calculate_match_score(user1_responses, user2_responses):
+    match_score = sum(1 for x, y in zip(user1_responses, user2_responses) if x == y)
+    return match_score
+
+# Dictionary to store match scores for each user
+match_scores = {}
 top_matches_2 = {}
 
-for i in range(1, 21):
-    user_id = '{:03d}'.format(i)
-    user_response = '''
-        SELECT * FROM Responses WHERE UserID = '{}'
-        '''.format(user_id)
-    cursor.execute(user_response)
-    user_answer = cursor.fetchone()
-    # print(user_answer)
-#  Add in last 6 questions
-    query = '''
-    SELECT UserID,
-        (CASE WHEN Question1 = '{0}' THEN 1 ELSE 0 END +
-            CASE WHEN Question8 = '{1}' THEN 1 ELSE 0 END +
-            CASE WHEN Question11 = '{2}' THEN 1 ELSE 0 END +
-            CASE WHEN Question21 = '{3}' THEN 1 ELSE 0 END +
-            CASE WHEN Question25 = '{4}' THEN 1 ELSE 0 END +
-            CASE WHEN Question26 = '{5}' THEN 1 ELSE 0 END +
-            CASE WHEN Question27 = '{6}' THEN 1 ELSE 0 END +
-            CASE WHEN Question28 = '{7}' THEN 1 ELSE 0 END +
-            CASE WHEN Question29 = '{8}' THEN 1 ELSE 0 END +
-            CASE WHEN Question30 = '{9}' THEN 1 ELSE 0 END) AS match_score
-    FROM Responses
-    WHERE UserID != '{10}'
-    ORDER BY match_score ASC
-    LIMIT 5;
-    '''.format(user_answer[1], user_answer[8], user_answer[11], user_answer[21], user_answer[25], user_answer[26], user_answer[27], user_answer[28], user_answer[29], user_answer[30], user_answer[31] )
-
-    cursor.execute(query)
-    user_match = cursor.fetchall()
-
-    matched_user_ids = [match[0] for match in user_match]
-    users_2[i] = matched_user_ids
+# Iterate over each user
+for user_data in data:
+    user_id = user_data[-1]  # Last element is the user ID
+    user_responses = user_data[:-1]  # Exclude the user ID
+    match_scores[user_id] = {}  # Initialize dictionary for current user
     
-cursor.close()
-connection.close()
+    # Calculate match scores with other users
+    for other_user_data in data:
+        other_user_id = other_user_data[-1]
+        other_user_responses = other_user_data[:-1]
+        
+        # Exclude self-comparison
+        if user_id != other_user_id:
+            match_score = calculate_match_score(user_responses, other_user_responses)
+            match_scores[user_id][other_user_id] = match_score
 
-for user_id in users_2:
-    top_matches_2[user_id] = users_2[user_id]
+# Dictionary to store top 5 least common users for each user
+top_least_common = {}
+
+# Iterate over each user's match scores
+for user_id, scores in match_scores.items():
+    # Sort the scores by match score in ascending order
+    sorted_scores = sorted(scores.items(), key=lambda x: x[1])
+    # Select the top 5 least common users
+    top_least_common[user_id] = [user for user, score in sorted_scores[:5]]
+
+top_matches_2 = top_least_common.copy()
 
 frequencies_2 = {}
-for value in top_matches_2.values():
+for value in top_least_common.values():
     # loop through all indices in array 
     for element in value:
         # increment value if already in dictionary
@@ -219,75 +220,40 @@ print("Group 2 (Communication): ", groups_round2_communications)
 users = {}
 top_matches = {}
 
-# Connect to MySQL database
-connection = mysql.connector.connect(
-    host="35.185.219.33",
-    user="root",
-    password="myname",
-    database="celebratory-tech"
-)
+def calculate_match_score(user1_responses, user2_responses):
+    match_score = sum(1 for x, y in zip(user1_responses, user2_responses) if x == y)
+    return match_score
 
-# Create a cursor object
-cursor = connection.cursor()
+# Dictionary to store match scores for each user
+match_scores = {}
 
-for i in range(1, 21):
-    user_id = '{:03d}'.format(i)
-
-    if not connection.is_connected():
-        connection.reconnect()
-
-    user_response = '''
-        SELECT * FROM Responses WHERE UserID = '{}'
-        '''.format(user_id)
-    cursor.execute(user_response)
-    user_answer = cursor.fetchone()
-
-    query = '''
-        SELECT UserID,
-            (CASE WHEN Question1 = '{0}' THEN 1 ELSE 0 END +
-                CASE WHEN Question2 = '{1}' THEN 1 ELSE 0 END +
-                CASE WHEN Question3 = '{2}' THEN 1 ELSE 0 END +
-                CASE WHEN Question4 = '{3}' THEN 1 ELSE 0 END +
-                CASE WHEN Question5 = '{4}' THEN 1 ELSE 0 END +
-                CASE WHEN Question6 = '{5}' THEN 1 ELSE 0 END +
-                CASE WHEN Question7 = '{6}' THEN 1 ELSE 0 END +
-                CASE WHEN Question8 = '{7}' THEN 1 ELSE 0 END +
-                CASE WHEN Question9 = '{8}' THEN 1 ELSE 0 END +
-                CASE WHEN Question10 = '{9}' THEN 1 ELSE 0 END +
-                CASE WHEN Question11 = '{10}' THEN 1 ELSE 0 END +
-                CASE WHEN Question12 = '{11}' THEN 1 ELSE 0 END +
-                CASE WHEN Question13 = '{12}' THEN 1 ELSE 0 END +
-                CASE WHEN Question14 = '{13}' THEN 1 ELSE 0 END +
-                CASE WHEN Question15 = '{14}' THEN 1 ELSE 0 END +
-                CASE WHEN Question16 = '{15}' THEN 1 ELSE 0 END +
-                CASE WHEN Question17 = '{16}' THEN 1 ELSE 0 END +
-                CASE WHEN Question18 = '{17}' THEN 1 ELSE 0 END +
-                CASE WHEN Question19 = '{18}' THEN 1 ELSE 0 END +
-                CASE WHEN Question20 = '{19}' THEN 1 ELSE 0 END +
-                CASE WHEN Question21 = '{20}' THEN 1 ELSE 0 END +
-                CASE WHEN Question22 = '{21}' THEN 1 ELSE 0 END +
-                CASE WHEN Question23 = '{22}' THEN 1 ELSE 0 END +
-                CASE WHEN Question24 = '{23}' THEN 1 ELSE 0 END +
-                CASE WHEN Question25 = '{24}' THEN 1 ELSE 0 END +
-                CASE WHEN Question26 = '{25}' THEN 1 ELSE 0 END +
-                CASE WHEN Question27 = '{26}' THEN 1 ELSE 0 END +
-                CASE WHEN Question28 = '{27}' THEN 1 ELSE 0 END +
-                CASE WHEN Question29 = '{28}' THEN 1 ELSE 0 END +
-                CASE WHEN Question30 = '{29}' THEN 1 ELSE 0 END) AS match_score
-        FROM Responses
-        WHERE UserID != '{30}'
-        ORDER BY match_score DESC
-        LIMIT 5;
-        '''.format(user_answer[1], user_answer[2], user_answer[3], user_answer[4], user_answer[5], user_answer[6], user_answer[7], user_answer[8], user_answer[9], user_answer[10], user_answer[11], user_answer[12], user_answer[13], user_answer[14], user_answer[15], user_answer[16], user_answer[17], user_answer[18], user_answer[19], user_answer[20], user_answer[21], user_answer[22], user_answer[23], user_answer[24], user_answer[25], user_answer[26], user_answer[27],user_answer[28],user_answer[29],user_answer[30], user_id )
-
-    cursor.execute(query)
-    user_match = cursor.fetchall()
+# Iterate over each user
+for user_data in data:
+    user_id = user_data[-1]  # Last element is the user ID
+    user_responses = user_data[:-1]  # Exclude the user ID
+    match_scores[user_id] = {}  # Initialize dictionary for current user
     
-    matched_user_ids = [match[0] for match in user_match]
-    users[i] = matched_user_ids
+    # Calculate match scores with other users
+    for other_user_data in data:
+        other_user_id = other_user_data[-1]
+        other_user_responses = other_user_data[:-1]
+        
+        # Exclude self-comparison
+        if user_id != other_user_id:
+            match_score = calculate_match_score(user_responses, other_user_responses)
+            match_scores[user_id][other_user_id] = match_score
 
-cursor.close()
-connection.close()
+# Dictionary to store top 5 most common users for each user
+top_most_common = {}
+
+# Iterate over each user's match scores
+for user_id, scores in match_scores.items():
+    # Sort the scores by match score in descending order
+    sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    # Select the top 5 most common users
+    top_most_common[user_id] = [user for user, score in sorted_scores[:5]]
+
+top_matches = top_most_common.copy()
 
 # key = ID, value = hits in the top matches dictionary 
 # EXAMPLE OF DATA: {"004": 4}
@@ -411,3 +377,4 @@ for num in numbers:
 print("ROUND 3 STRAGGLERS: ", missing_values)
 
 print("Group 3 (Best Matches): ", groups_round3_best)
+    
