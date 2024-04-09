@@ -324,7 +324,7 @@ function submitForm() {
     });
     
     // Make an HTTP POST request to the server
-    fetch('http://localhost:3000/submit-form', {
+    fetch('https://discoball.vercel.app/api/submit-form',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
