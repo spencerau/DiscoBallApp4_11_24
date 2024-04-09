@@ -48,8 +48,6 @@ app.post('/api/server', (req, res) => {
     formData['answers']['26'], formData['answers']['27'], formData['answers']['28'], formData['answers']['29'], formData['answers']['30'],
     formData['answers']['31'] // Assuming this is the UserID
 ];
-            
-            
 
   pool.getConnection((err, connection) => {
     if (err) {
