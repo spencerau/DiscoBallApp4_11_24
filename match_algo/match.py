@@ -7,7 +7,7 @@ connection = mysql.connector.connect(
     host="35.185.219.33",
     user="root",
     password="myname",
-    database="mydatabase"
+    database="celebratory-tech"
 )
 
 # Create a cursor object

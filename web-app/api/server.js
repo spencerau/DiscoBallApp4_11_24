@@ -15,7 +15,7 @@ const pool = mysql.createPool({
   host: "35.185.219.33", // Your MySQL host
   user: 'root', // Your MySQL username
   password: 'myname', // Your MySQL password
-  database: 'mydatabase' // Your MySQL database name
+  database: 'celebratory-tech' // Your MySQL database name
 });
 
 // Define route to handle form submissions
