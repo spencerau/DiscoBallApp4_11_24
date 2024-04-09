@@ -21,7 +21,7 @@ const pool = mysql.createPool({
 // Define route to handle form submissions
 app.use(express.json()); // Parse JSON request bodies
 
-app.post('/submit-form', (req, res) => {
+app.post('/api/server', (req, res) => {
   // Extract data from request body
   const formData = req.body;
 
