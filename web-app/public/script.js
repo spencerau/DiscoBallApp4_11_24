@@ -7,26 +7,67 @@ let dbAnswers = {};
 
 let currentQuestionIndex = 0; 
 
-const colorMapping = {
-    1: "#8E44AD", 
-    2: "#3357FF", 
-    3: "#57FF33", 
-    4: "#FF3357", 
-    5: "#F1C40F",
-    6: "#3498DB",
-    7: "#C72222",
-    8: "#EB31A0",
-    9: "#d63eed",
-    10: "#9a34c9",
-    11: "#8048d4",
-    12: "#4055f5",
-    13: "#40d1f5",
-    14: "#34e0c4",
-    15: "#3cb044",
-    16: "#b6db51",
-    17: "#f2e30c",
-    18: "#ed9e2f"
-};
+let prev_offset_arr = [];
+
+// const colorMapping = [ 
+//     "#57FF33", // Index 0
+//     "#FF3357", // Index 1
+//     "#F1C40F", // Index 2
+//     "#3498DB", // Index 3
+//     "#C72222", // Index 4
+//     "#EB31A0", // Index 5
+//     "#d63eed", // Index 6
+//     "#8E44AD", // Index 7
+//     "#8048d4", // Index 8
+//     "#4055f5", // Index 9
+//     "#40d1f5", // Index 10
+//     "#34e0c4", // Index 11
+//     "#3cb044", // Index 12
+//     "#b6db51", // Index 13
+//     "#f2e30c", // Index 14
+//     "#ed9e2f", // Index 15
+//     "#e74c3c"  // Index 16
+// ];
+
+const colorMapping = [
+    "#c72222",
+    "#eb31a0",
+    "#d63eed",
+    "#9a34c9",
+    "#8048d4",
+    "#4055f5",
+    "#40d1f5",
+    "#34e0c4",
+    "#3cb044",
+    "#b6db51",
+    "#f2e30c",
+    "#ed9e2f",
+    "#b2da28",
+    "#09d0df",
+    "#0610d9",
+    "#ca76da",
+    "#d7cf9d",
+    "#2383e0",
+    "#dc6837",
+    "#730d94",
+    "#b31176",
+    "#F1F890",
+    "#275317",
+    "#F8A390",
+    "#ECC520",
+    "#BE6A96",
+    "#9C94E8",
+    "#FF6969",
+    "#F2B050",
+    "#F890DD",
+    "#47D45A",
+    "#BF9659",
+    "#66FFCC",
+    "#FF37EC",
+    "#FF0000",
+    "#009999"
+];
+
 
 
 function fetchQuestions() {
@@ -48,6 +89,8 @@ function fetchQuestions() {
 
   function setupQuestionnaire(questions) {
     const container = document.getElementById('questions-container');
+    prev_offset_arr.push(0); // Initialize with 0 for the first entry
+    let cumulativeAnswers = 0; // To keep track of the cumulative number of answers
 
     questions.forEach((q, index) => {
         const questionSection = document.createElement('div');
@@ -81,6 +124,11 @@ function fetchQuestions() {
             });
         }
 
+        // Update the cumulativeAnswers before moving to the next question
+        cumulativeAnswers += q.answers.length;
+        // For the next question, store the current total of answers as the offset
+        prev_offset_arr.push(cumulativeAnswers);
+
         const nextButton = document.createElement('button');
         nextButton.classList.add('next-button');
         nextButton.textContent = 'Next';
@@ -92,7 +140,13 @@ function fetchQuestions() {
         container.appendChild(questionSection);
     });
 
+    prev_offset_arr.pop();
+
+    // Optionally, log or otherwise utilize prev_offset_arr
+    console.log(prev_offset_arr);
+
     addEventListeners();
+
 }
 
 
@@ -135,7 +189,16 @@ function handleNextButtonClick(button, index, buttons) {
     const questionIndex = button.closest('.question-section').id.replace('question', '');
     dbAnswers[questionIndex] = parseInt(selectedIntegerValue);
 
-    //console.log("QUESTION INDEX: " + questionIndex);
+    //console.log(`Question index: ${questionIndex}, Selected answer: ${selectedIntegerValue}`); // Debugging print statement
+    
+    if (questionIndex != 31) {
+        prev = prev_offset_arr[questionIndex - 1];
+        colorIndex = (prev + parseInt(selectedIntegerValue) - 1) % colorMapping.length;
+        colorIndex += 0;
+        //console.log(`Color Index: ${colorIndex}`); // Debugging print statement
+        color = colorMapping[colorIndex];
+        colorSegment(questionIndex, parseInt(selectedIntegerValue), color);
+    }
 
     // Check if it's the last question
     if (isLastQuestion) {
@@ -207,7 +270,6 @@ function fetchAndEmbedSvg(svgPath, containerId, callback) {
 }
 
 
-
 function cloneSvgElement(containerId) {
     console.log(`Starting to clone SVG in container: ${containerId}`);
     const container = document.getElementById(containerId);
@@ -220,7 +282,6 @@ function cloneSvgElement(containerId) {
         console.error('Original SVG element not found for cloning.');
     }
 }
-
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -258,7 +319,6 @@ function colorSegment(questionIndex, answer, color) {
 }
 
 
-
 function saveSvg(svgElement, filename) {
     // Serialize the SVG element to a string
     const serializer = new XMLSerializer();
@@ -286,26 +346,11 @@ function submitForm() {
     // Convert dbAnswers object to an array
     const answersArray = Object.values(dbAnswers);
 
-    console.log(dbAnswers);
+    //console.log(dbAnswers);
 
     if (!clonedSvg || !(clonedSvg instanceof SVGSVGElement)) {
         console.error('Cloned SVG is not ready for saving.');
         return;
-    }
-
-    for (const [questionIndex, answer] of Object.entries(dbAnswers)) {
-        // Calculate color index, ensuring that we start counting from 0
-        const colorIndex = (questionIndex + answer - 1) % Object.keys(colorMapping).length;
-        // Use the color index to get the color from our mapping
-        // Add 1 because our mapping starts at 1, not 0
-        const color = colorMapping[colorIndex + 1];
-        console.log(`OUTSIDE FUNCTION CALL: Question index: ${questionIndex}, Answer: ${answer}, Color: ${color}`); // Print statement
-    
-        if (color) {
-            colorSegment(questionIndex, answer, color);
-        } else {
-            console.error(`No color defined for answer: ${answer}`);
-        }
     }
 
     // Append the colored SVG to the display container
