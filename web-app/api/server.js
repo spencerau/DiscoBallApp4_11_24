@@ -22,6 +22,9 @@ const pool = mysql.createPool({
 app.use(express.json()); // Parse JSON request bodies
 
 app.post('/api/server', (req, res) => {
+
+  console.log('Received form data from client:', req.body);
+  
   // Extract data from request body
   const formData = req.body;
 
