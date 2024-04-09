@@ -16,25 +16,42 @@
     text-align: center;
 }
 
-/* This is the parent container for the SVG. */
+/* Add a new wrapper around the disco ball for vertical centering */
+.disco-ball-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* This will vertically center the content in the viewport */
+    height: 100vh; /* Full height of the viewport */
+}
+
+/* Update the .disco-ball-container to remove specific height */
 .disco-ball-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-  }
-  
+    justify-content: center; /* Horizontally center the content */
+    align-items: center; /* Vertically center the content within this container */
+    width: 100%; /* Full width of the container */
+    /* Remove height to allow container to shrink to fit the SVG */
+}
 
-/* Styling for the SVG itself. */
+/* Adjust the SVG size as needed */
 .disco-ball-container svg {
-    display: block;
-    margin: auto; /* Centers the SVG in the container */
-    width: 50vw; /* Example: 50% of the viewport width */
-    height: 50vw; /* Example: same as width to maintain aspect ratio */
-    max-width: 100%; /* Ensures the SVG doesn't overflow its container */
-    max-height: 100%; /* Ensures the SVG doesn't overflow its container */
-  }
+    padding: 25px;
+    max-height: 80vh; /* Adjust this value as needed */
+}
+
+.download-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    /* min-height: 100vh; Full height of the viewport */
+}
+
+.download-button {
+    padding: 10px 20px; /* Add some padding */
+    font-size: 16px; /* Increase font size */
+    cursor: pointer; /* Cursor pointer on hover */
+    /* Add other styling as needed */
+}
   
 
 .question-container {
@@ -104,7 +121,7 @@ body {
 .container {
     max-width: 800px; /* Example max width */
     margin: auto;
-    padding: 20px;
+    padding: 5px;
 }
 
 /* Style the next button to be more prominent */

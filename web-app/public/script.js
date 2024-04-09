@@ -130,6 +130,13 @@ function handleNextButtonClick(button, index, buttons) {
         console.log("About to call submitForm", clonedSvg);
         // Process the final question differently
         submitForm();
+
+        // Hide the current question section
+        const currentSection = button.closest('.question-section');
+        if (currentSection) {
+            currentSection.classList.add('hidden');
+        }
+
         return; // Exit the function to prevent further execution
     }
 
@@ -221,11 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
     
 
-function colorSegment(questionIndex, answer) {
-    const classSelector = `.q${questionIndex}`;
-    const color = colorMapping[answer];
+function colorSegment(questionIndex, answer, color) {
 
-    console.log(`Coloring segment: ${classSelector} with color: ${color} for answer: ${answer}`); // Debugging print statement
+    const classSelector = `.q${questionIndex}`;
+    
+    console.log(`inside colorSegment(): Coloring segment: ${classSelector} with color: ${color} for answer: ${answer}`); // Debugging print statement
 
     const svgElements = clonedSvg.querySelectorAll(classSelector);
     
@@ -275,22 +282,34 @@ function submitForm() {
     }
 
     for (const [questionIndex, answer] of Object.entries(dbAnswers)) {
-        const color = colorMapping[answer]; // Ensure this resolves to a defined color
-        console.log(`Question index: ${questionIndex}, Answer: ${answer}, Color: ${color}`); // Print statement
+        // Calculate color index, ensuring that we start counting from 0
+        const colorIndex = (questionIndex + answer - 1) % Object.keys(colorMapping).length;
+        // Use the color index to get the color from our mapping
+        // Add 1 because our mapping starts at 1, not 0
+        const color = colorMapping[colorIndex + 1];
+        console.log(`OUTSIDE FUNCTION CALL: Question index: ${questionIndex}, Answer: ${answer}, Color: ${color}`); // Print statement
     
         if (color) {
-            colorSegment(questionIndex, answer);
+            colorSegment(questionIndex, answer, color);
         } else {
             console.error(`No color defined for answer: ${answer}`);
         }
     }
 
-    // Display the colored SVG
+    // Append the colored SVG to the display container
     const svgDisplayContainer = document.getElementById('svgDisplayContainer');
     svgDisplayContainer.innerHTML = ''; // Clear the container
     svgDisplayContainer.appendChild(clonedSvg); // Add the colored SVG to the container
 
-    saveSvg(clonedSvg, 'export_discoball.svg');
+    // Show the download button
+    const downloadButton = document.getElementById('download-button');
+    downloadButton.style.display = 'flex'; // Use 'flex' to make it visible
+
+
+    // Event listener for the download button
+    downloadButton.addEventListener('click', function() {
+        saveSvg(clonedSvg, 'export_discoball.svg');
+    });
     
     // Make an HTTP POST request to the server
     fetch('http://localhost:3000/submit-form', {
