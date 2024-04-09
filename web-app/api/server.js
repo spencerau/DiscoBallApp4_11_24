@@ -35,13 +35,15 @@ app.post('/api/server', (req, res) => {
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const values = [
-    formData.Question1, formData.Question2, formData.Question3, formData.Question4, formData.Question5, formData.Question6,
-    formData.Question7, formData.Question8, formData.Question9, formData.Question10, formData.Question11, formData.Question12, 
-    formData.Question13, formData.Question14, formData.Question15, formData.Question16, formData.Question17, formData.Question18, 
-    formData.Question19, formData.Question20, formData.Question21, formData.Question22, formData.Question23, formData.Question24, 
-    formData.Question25, formData.Question26, formData.Question27, formData.Question28, formData.Question29, formData.Question30, 
-    formData.UserID
+    formData['1'], formData['2'], formData['3'], formData['4'], formData['5'],
+    formData['6'], formData['7'], formData['8'], formData['9'], formData['10'],
+    formData['11'], formData['12'], formData['13'], formData['14'], formData['15'],
+    formData['16'], formData['17'], formData['18'], formData['19'], formData['20'],
+    formData['21'], formData['22'], formData['23'], formData['24'], formData['25'],
+    formData['26'], formData['27'], formData['28'], formData['29'], formData['30'],
+    formData['UserID']
   ];
+            
 
   pool.getConnection((err, connection) => {
     if (err) {

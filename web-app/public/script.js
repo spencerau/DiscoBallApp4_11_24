@@ -330,8 +330,8 @@ function submitForm() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            // Send the answers array to the server
-            answers: answersArray
+            // Send the dbAnswers object to the server
+            answers: dbAnswers
         })
     })
     .then(response => {
@@ -348,14 +348,4 @@ function submitForm() {
         console.error('Error submitting form:', error);
         // Handle error, if needed
     });
-
-
 }
-
-
-
-
-
-
-
-
