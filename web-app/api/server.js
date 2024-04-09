@@ -1,6 +1,7 @@
 const express = require('express');
 const { Pool } = require('pg');
 const cors = require('cors'); // Import the cors middleware
+const mysql = require('mysql');
 
 const app = express();
 const port = 3000;
