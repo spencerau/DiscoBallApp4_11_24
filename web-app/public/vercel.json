@@ -1,0 +1,7 @@
+{
+    "version": 2,
+    "routes": [
+      { "handle": "filesystem" },
+      { "src": "/api/create-table", "dest": "api/create-table.js" }
+    ]
+  }  
