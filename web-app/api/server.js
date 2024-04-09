@@ -28,6 +28,8 @@ app.post('/api/server', (req, res) => {
   // Extract data from request body
   const formData = req.body;
 
+  console.log('Received form data from client:', formData);
+
   // Validate and sanitize form data (TODO: Implement validation and sanitization)
 
   // Insert form data into database using parameterized query
@@ -38,14 +40,15 @@ app.post('/api/server', (req, res) => {
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const values = [
-    formData['1'], formData['2'], formData['3'], formData['4'], formData['5'],
-    formData['6'], formData['7'], formData['8'], formData['9'], formData['10'],
-    formData['11'], formData['12'], formData['13'], formData['14'], formData['15'],
-    formData['16'], formData['17'], formData['18'], formData['19'], formData['20'],
-    formData['21'], formData['22'], formData['23'], formData['24'], formData['25'],
-    formData['26'], formData['27'], formData['28'], formData['29'], formData['30'],
-    formData['UserID']
-  ];
+    formData['answers']['1'], formData['answers']['2'], formData['answers']['3'], formData['answers']['4'], formData['answers']['5'],
+    formData['answers']['6'], formData['answers']['7'], formData['answers']['8'], formData['answers']['9'], formData['answers']['10'],
+    formData['answers']['11'], formData['answers']['12'], formData['answers']['13'], formData['answers']['14'], formData['answers']['15'],
+    formData['answers']['16'], formData['answers']['17'], formData['answers']['18'], formData['answers']['19'], formData['answers']['20'],
+    formData['answers']['21'], formData['answers']['22'], formData['answers']['23'], formData['answers']['24'], formData['answers']['25'],
+    formData['answers']['26'], formData['answers']['27'], formData['answers']['28'], formData['answers']['29'], formData['answers']['30'],
+    formData['answers']['31'] // Assuming this is the UserID
+];
+            
             
 
   pool.getConnection((err, connection) => {
