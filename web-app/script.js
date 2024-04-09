@@ -146,7 +146,7 @@ function handleNextButtonClick(button, index, buttons) {
     if (isLastQuestion) {
         // Process the final question differently
         submitForm();
-        return; // Exit the function to prevent further execution
+        window.location.href = 'end.html'; //sends to end.html
     }
 
     // Move to the next question
@@ -162,8 +162,6 @@ function handleNextButtonClick(button, index, buttons) {
         console.error('Next question section not found');
     }
 }
-
-
 
 function handleAnswerButtonClick() {
     // Remove 'selected' from all buttons in this answer group
