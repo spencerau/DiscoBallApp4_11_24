@@ -144,123 +144,123 @@
       } -->
 
       .q1 {
-        fill: red;
+        fill: silver;
       }
 
       .q2 {
-        fill: orange;
+        fill: silver;
       }
 
       .q3 {
-        fill: yellow;
+        fill: silver;
       }
 
       .q4 {
-        fill: green;
+        fill: silver;
       }
 
       .q5 {
-        fill: blue;
+        fill: silver;
       }
 
       .q6 {
-        fill: purple;
+        fill: silver;
       }
 
       .q7 {
-        fill: yellow;
+        fill: silver;
       }
 
       .q8 {
-        fill: green;
+        fill: silver;
       }
 
       .q9 {
-        fill: blue;
+        fill: silver;
       }
 
       .q10 {
-        fill: purple;
+        fill: silver;
       }
 
       .q11 {
-        fill: red;
+        fill: silver;
       }
 
       .q12 {
-        fill: orange;
+        fill: silver;
       }
 
       .q13 {
-        fill: red;
+        fill: silver;
       }
 
       .q14 {
-        fill: purple;
+        fill: silver;
       }
 
       .q15 {
-        fill: lightblue;
+        fill: silver;
       }
 
       .q16 {
-        fill: green;
+        fill: silver;
       }
 
       .q17 {
-        fill: lightgreen;
+        fill: silver;
       }
 
       .q18 {
-        fill: pink;
+        fill: silver;
       }
 
       .q19 {
-        fill: pink;
+        fill: silver;
       }
 
       .q20 {
-        fill: gray;
+        fill: silver;
       }
 
       .q21 {
-        fill: red;
+        fill: silver;
       }
 
       .q22 {
-        fill: blue;
+        fill: silver;
       }
 
       .q23 {
-        fill: yellow;
+        fill: silver;
       }
 
       .q24 {
-        fill: green;
+        fill: silver;
       }
 
       .q25 {
-        fill: orange;
+        fill: silver;
       }
 
       .q26 {
-        fill: purple;
+        fill: silver;
       }
 
       .q27 {
-        fill: lightorange;
+        fill: silver;
       }
 
       .q28 {
-        fill: lightblue;
+        fill: silver;
       }
 
       .q29 {
-        fill: lightgreen;
+        fill: silver;
       }
 
       .q30 {
-        fill: yellow;
+        fill: silver;
       }
 
     </style>

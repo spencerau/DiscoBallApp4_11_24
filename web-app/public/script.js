@@ -9,6 +9,7 @@ let currentQuestionIndex = 0;
 
 let prev_offset_arr = [];
 
+
 // const colorMapping = [ 
 //     "#57FF33", // Index 0
 //     "#FF3357", // Index 1
@@ -67,7 +68,6 @@ const colorMapping = [
     "#FF0000",
     "#009999"
 ];
-
 
 
 function fetchQuestions() {
